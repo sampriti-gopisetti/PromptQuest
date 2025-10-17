@@ -61,22 +61,29 @@ const Index = () => {
     completeLevel(currentQuestionLevel, earnedScore);
     unlockNextLevel();
 
-    // Close feedback modal
+    // Close feedback modal immediately so user can see the map
     setShowFeedbackModal(false);
 
-    // Show celebration
-    setShowCelebration(true);
-
-    // Show success toast
+    // Small delay to let modal close animation complete
     setTimeout(() => {
-      toast({
-        title: '✅ Level Complete!',
-        description: `+${earnedScore} points earned`,
-      });
-    }, 500);
+      // The character movement happens automatically when currentLevel updates
+      // (via unlockNextLevel which already incremented currentLevel)
+      
+      // After character movement animation (~1 second), show celebration
+      setTimeout(() => {
+        setShowCelebration(true);
+        
+        toast({
+          title: '✅ Level Complete!',
+          description: `+${earnedScore} points earned`,
+        });
+      }, 1000);
+    }, 300);
 
-    // Reset current question level
-    setCurrentQuestionLevel(null);
+    // Reset current question level after everything completes
+    setTimeout(() => {
+      setCurrentQuestionLevel(null);
+    }, 2500);
   };
 
   return (

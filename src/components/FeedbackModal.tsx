@@ -47,7 +47,7 @@ export const FeedbackModal = ({
               Question:
             </Label>
             <div
-              className="p-4 rounded-lg border-3 border-black bg-blue-100 min-h-[80px] flex items-center text-base"
+              className="p-4 rounded-lg border-3 border-black bg-blue-100 min-h-[80px] flex items-center text-base text-black"
               style={{ filter: 'url(#sketch-outline)' }}
             >
               {question}
@@ -60,23 +60,42 @@ export const FeedbackModal = ({
               Your Answer:
             </Label>
             <div
-              className="p-4 rounded-lg border-3 border-black bg-gray-100 min-h-[80px] flex items-center text-base"
+              className="p-4 rounded-lg border-3 border-black bg-gray-100 min-h-[80px] flex items-center text-base text-black"
               style={{ filter: 'url(#sketch-outline)' }}
             >
               {userAnswer}
             </div>
           </div>
 
-          {/* Score Display */}
+          {/* Feedback Content */}
           <div className="space-y-2">
             <Label className="text-lg font-bold">
               Feedback:
             </Label>
             <div
-              className="p-4 rounded-lg border-3 border-black bg-green-100 min-h-[80px] flex items-center justify-center text-2xl font-black"
+              className="p-4 rounded-lg border-3 border-black bg-green-100 min-h-[60px] flex items-center text-base text-black"
               style={{ filter: 'url(#sketch-outline)' }}
             >
-              🎉 Score: +{score} points
+              {score >= 400 
+                ? "🌟 Excellent work! Your answer shows deep understanding of the concept."
+                : score >= 300
+                ? "👍 Great job! You've demonstrated good knowledge on this topic."
+                : score >= 200
+                ? "✨ Well done! You're making solid progress through the levels."
+                : "💪 Nice effort! Keep learning and you'll master this in no time."}
+            </div>
+          </div>
+
+          {/* Score Display - Separate Box */}
+          <div className="space-y-2">
+            <Label className="text-lg font-bold">
+              Score Earned:
+            </Label>
+            <div
+              className="p-4 rounded-lg border-3 border-black bg-purple-100 min-h-[80px] flex items-center justify-center text-3xl font-black text-black"
+              style={{ filter: 'url(#sketch-outline)' }}
+            >
+              🎉 +{score} points
             </div>
           </div>
         </div>
