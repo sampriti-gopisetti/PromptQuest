@@ -24,7 +24,7 @@ export const SketchyCharacter2D = ({
 
   return (
     <div
-      className="absolute transition-all duration-2000"
+      className="absolute transition-all duration-500"
       style={{
         left: `${position.x}px`,
         top: `${position.y}px`,
