@@ -4,7 +4,10 @@
   "private": true,
   "scripts": {
     "install-all": "npm install && npm install --prefix Frontend",
-    "dev": "concurrently \"npm run start --prefix Frontend\" \"python app.py\""
+    "dev": "npm run dev --prefix Frontend",
+    "dev:frontend": "npm run dev --prefix Frontend",
+    "dev:backend": "python Backend/app.py",
+    "dev:all": "concurrently \"npm run dev --prefix Frontend\" \"python Backend/app.py\""
   },
   "devDependencies": {
     "concurrently": "^8.2.2"

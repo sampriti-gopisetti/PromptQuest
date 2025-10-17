@@ -1,5 +1,4 @@
-// Default to same-origin in production. In local dev, set VITE_API_BASE_URL=http://localhost:5000
-export const API_BASE = import.meta.env.VITE_API_BASE_URL || "";
+export const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
 
 export interface EvaluateRequest {
   level_id: string;
