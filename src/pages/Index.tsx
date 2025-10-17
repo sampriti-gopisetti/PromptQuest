@@ -6,6 +6,7 @@ import { Leaderboard } from '@/components/Leaderboard';
 import { BossWarningDialog } from '@/components/BossWarningDialog';
 import { CelebrationFireworks } from '@/components/CelebrationFireworks';
 import { QuestionModal } from '@/components/QuestionModal';
+import { FeedbackModal } from '@/components/FeedbackModal';
 import { useGameState } from '@/hooks/useGameState';
 import { toast } from '@/hooks/use-toast';
 
@@ -14,7 +15,11 @@ const Index = () => {
   const [showBossWarning, setShowBossWarning] = useState(false);
   const [showCelebration, setShowCelebration] = useState(false);
   const [showQuestionModal, setShowQuestionModal] = useState(false);
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const [currentQuestionLevel, setCurrentQuestionLevel] = useState<number | null>(null);
+  const [currentQuestion, setCurrentQuestion] = useState('');
+  const [submittedAnswer, setSubmittedAnswer] = useState('');
+  const [earnedScore, setEarnedScore] = useState(0);
   const { points, currentLevel, completeLevel, unlockNextLevel } = useGameState();
 
   const handleBossClick = () => {
@@ -23,11 +28,9 @@ const Index = () => {
 
   const handleBossAccept = () => {
     setShowBossWarning(false);
-    toast({
-      title: '⚔️ Boss Challenge Started!',
-      description: 'Navigate to the challenge screen...',
-    });
-    // In a real app, navigate to the boss challenge screen
+    // Open the question modal for level 10
+    setCurrentQuestionLevel(10);
+    setShowQuestionModal(true);
   };
 
   const handleLevelClick = (level: number) => {
@@ -35,18 +38,31 @@ const Index = () => {
     setShowQuestionModal(true);
   };
 
-  const handleAnswerSubmit = (answer: string) => {
+  const handleAnswerSubmit = (answer: string, question: string) => {
     if (currentQuestionLevel === null) return;
 
     // Mock scoring logic - In real app, send to API for validation
     const score = Math.floor(Math.random() * 400) + 100; // Random score between 100-500
 
-    // Close modal
-    setShowQuestionModal(false);
+    // Store data for feedback modal
+    setSubmittedAnswer(answer);
+    setCurrentQuestion(question);
+    setEarnedScore(score);
 
-    // Update game state
-    completeLevel(currentQuestionLevel, score);
+    // Close question modal and open feedback modal
+    setShowQuestionModal(false);
+    setShowFeedbackModal(true);
+  };
+
+  const handleNextLevel = () => {
+    if (currentQuestionLevel === null) return;
+
+    // Complete the level and unlock next
+    completeLevel(currentQuestionLevel, earnedScore);
     unlockNextLevel();
+
+    // Close feedback modal
+    setShowFeedbackModal(false);
 
     // Show celebration
     setShowCelebration(true);
@@ -55,7 +71,7 @@ const Index = () => {
     setTimeout(() => {
       toast({
         title: '✅ Level Complete!',
-        description: `+${score} points earned`,
+        description: `+${earnedScore} points earned`,
       });
     }, 500);
 
@@ -87,6 +103,18 @@ const Index = () => {
         }}
         level={currentQuestionLevel || 1}
         onSubmit={handleAnswerSubmit}
+      />
+      <FeedbackModal
+        open={showFeedbackModal}
+        onClose={() => {
+          setShowFeedbackModal(false);
+          setCurrentQuestionLevel(null);
+        }}
+        question={currentQuestion}
+        userAnswer={submittedAnswer}
+        score={earnedScore}
+        level={currentQuestionLevel || 1}
+        onNextLevel={handleNextLevel}
       />
       
       {/* Celebration Effects */}

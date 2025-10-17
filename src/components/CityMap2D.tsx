@@ -27,10 +27,13 @@ export const CityMap2D = ({ onBossClick, onLevelClick }: CityMap2DProps) => {
     const row = Math.floor((level - 1) / 5); // 5 buildings per row
     const col = (level - 1) % 5;
     
+    // Add extra spacing for buildings 5 and 6 (columns 4 and 5 in 0-indexed)
+    const extraSpace = col >= 4 ? 50 : 0;
+    
     // Alternate direction per row (snake pattern) - horizontal
     const x = row % 2 === 0 
-      ? 50 + col * colWidth 
-      : 50 + (4 - col) * colWidth;
+      ? 50 + col * colWidth + extraSpace
+      : 50 + (4 - col) * colWidth + (col <= 0 ? extraSpace : 0);
     const y = 100 + row * rowHeight; // Start from top
     
     return { x, y };

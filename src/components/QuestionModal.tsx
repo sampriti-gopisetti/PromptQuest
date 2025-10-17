@@ -15,7 +15,7 @@ interface QuestionModalProps {
   open: boolean;
   onClose: () => void;
   level: number;
-  onSubmit: (answer: string) => void;
+  onSubmit: (answer: string, question: string) => void;
 }
 
 export const QuestionModal = ({ open, onClose, level, onSubmit }: QuestionModalProps) => {
@@ -40,7 +40,7 @@ export const QuestionModal = ({ open, onClose, level, onSubmit }: QuestionModalP
 
   const handleSubmit = () => {
     if (answer.trim()) {
-      onSubmit(answer);
+      onSubmit(answer, currentQuestion.question);
       setAnswer('');
       setShowHint(false);
     }

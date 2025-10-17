@@ -132,6 +132,19 @@ export const SketchyBuilding2D = ({
               >
                 <Crown size={32} />
               </div>
+              {/* Google G Symbol */}
+              <div 
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-6xl font-black"
+                style={{ 
+                  filter: 'url(#sketch-outline)',
+                  background: 'linear-gradient(90deg, #4285F4 25%, #EA4335 25%, #EA4335 50%, #FBBC05 50%, #FBBC05 75%, #34A853 75%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text'
+                }}
+              >
+                G
+              </div>
               {/* Lightning bolts */}
               <div className="absolute -left-3 top-1/2 text-yellow-300 text-2xl animate-pulse drop-shadow-lg">
                 ⚡
@@ -150,11 +163,6 @@ export const SketchyBuilding2D = ({
             style={{ filter: 'url(#sketch-outline)', zIndex: 60 }}
           >
             <Lock size={16} className="text-gray-700" strokeWidth={2.5} />
-          </div>
-        )}
-        {isCompleted && (
-          <div className="absolute -top-4 -right-4 bg-white rounded-full p-3 border-4 border-black shadow-lg" style={{ filter: 'url(#sketch-outline)', zIndex: 10 }}>
-            <CheckCircle2 size={28} className="text-green-500" strokeWidth={3} />
           </div>
         )}
 
