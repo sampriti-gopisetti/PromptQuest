@@ -17,7 +17,7 @@ export const useGameState = create<GameState>()(
     (set, get) => ({
       currentLevel: 1,
       completedLevels: [],
-      points: 2850,
+      points: 0,
       playerName: 'You',
 
       completeLevel: (levelId: number, earnedPoints: number) => {

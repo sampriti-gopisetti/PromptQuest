@@ -4,12 +4,14 @@ import { PlayerStatus } from '@/components/PlayerStatus';
 import { LeaderboardButton } from '@/components/LeaderboardButton';
 import { Leaderboard } from '@/components/Leaderboard';
 import { BossWarningDialog } from '@/components/BossWarningDialog';
+import { CelebrationFireworks } from '@/components/CelebrationFireworks';
 import { useGameState } from '@/hooks/useGameState';
 import { toast } from '@/hooks/use-toast';
 
 const Index = () => {
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [showBossWarning, setShowBossWarning] = useState(false);
+  const [showCelebration, setShowCelebration] = useState(false);
   const { points, currentLevel, completeLevel, unlockNextLevel } = useGameState();
 
   const handleBossClick = () => {
@@ -35,10 +37,16 @@ const Index = () => {
     setTimeout(() => {
       completeLevel(level, 500);
       unlockNextLevel();
-      toast({
-        title: '✅ Level Complete!',
-        description: `+500 points earned`,
-      });
+      
+      // Show celebration fireworks
+      setShowCelebration(true);
+      
+      setTimeout(() => {
+        toast({
+          title: '✅ Level Complete!',
+          description: `+500 points earned`,
+        });
+      }, 500);
     }, 2000);
   };
 
@@ -58,6 +66,11 @@ const Index = () => {
         onAccept={handleBossAccept}
         onCancel={() => setShowBossWarning(false)}
       />
+      
+      {/* Celebration Effects */}
+      {showCelebration && (
+        <CelebrationFireworks onComplete={() => setShowCelebration(false)} />
+      )}
     </main>
   );
 };

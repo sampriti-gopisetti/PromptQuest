@@ -1,6 +1,7 @@
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from '@/components/ui/sheet';
 import { Trophy, Medal, Award } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useGameState } from '@/hooks/useGameState';
 
 interface LeaderboardEntry {
   rank: number;
@@ -15,21 +16,13 @@ interface LeaderboardProps {
   onClose: () => void;
 }
 
-// Mock data - replace with actual data later
-const mockLeaderboard: LeaderboardEntry[] = [
-  { rank: 1, playerName: 'PromptMaster', points: 15420, level: 10 },
-  { rank: 2, playerName: 'AIWhisperer', points: 12850, level: 10 },
-  { rank: 3, playerName: 'CodeNinja', points: 11200, level: 9 },
-  { rank: 4, playerName: 'DataWizard', points: 9800, level: 8 },
-  { rank: 5, playerName: 'QueryQueen', points: 8500, level: 8 },
-  { rank: 6, playerName: 'You', points: 2850, level: 7, isCurrentPlayer: true },
-  { rank: 7, playerName: 'TokenTamer', points: 7200, level: 7 },
-  { rank: 8, playerName: 'ContextKing', points: 6500, level: 6 },
-  { rank: 9, playerName: 'LLMExplorer', points: 5800, level: 6 },
-  { rank: 10, playerName: 'PromptPro', points: 4900, level: 5 },
-];
-
 export const Leaderboard = ({ open, onClose }: LeaderboardProps) => {
+  const { points, currentLevel, playerName } = useGameState();
+  
+  // Show only current player until multiplayer is implemented
+  const currentPlayerData: LeaderboardEntry[] = [
+    { rank: 1, playerName, points, level: currentLevel, isCurrentPlayer: true },
+  ];
   const getRankIcon = (rank: number) => {
     switch (rank) {
       case 1:
@@ -62,13 +55,13 @@ export const Leaderboard = ({ open, onClose }: LeaderboardProps) => {
         <SheetHeader>
           <SheetTitle className="text-3xl font-bold flex items-center gap-2">
             <Trophy className="w-8 h-8 text-yellow-400" />
-            Leaderboard
+            Your Progress
           </SheetTitle>
-          <SheetDescription>Top players in Prompt Quest</SheetDescription>
+          <SheetDescription>Track your journey through Prompt Quest</SheetDescription>
         </SheetHeader>
 
         <div className="mt-6 space-y-3">
-          {mockLeaderboard.map((entry, index) => (
+          {currentPlayerData.map((entry, index) => (
             <div
               key={entry.rank}
               className={cn(

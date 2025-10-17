@@ -42,8 +42,11 @@ export const SketchyBuilding2D = ({
 
   const type = getBuildingType();
   const color = getColor();
-  const baseSize = type === 'skyscraper' ? 60 : type === 'office' ? 50 : type === 'apartment' ? 45 : type === 'shop' ? 40 : 35;
-  const height = type === 'skyscraper' ? 80 : type === 'office' ? 60 : type === 'apartment' ? 50 : type === 'shop' ? 40 : 35;
+  
+  // Progressive sizing based on level
+  const sizeMultiplier = 1 + (level - 1) * 0.15; // Grows 15% per level
+  const baseSize = (type === 'skyscraper' ? 70 : type === 'office' ? 60 : type === 'apartment' ? 55 : type === 'shop' ? 50 : 45) * sizeMultiplier;
+  const height = (type === 'skyscraper' ? 90 : type === 'office' ? 70 : type === 'apartment' ? 60 : type === 'shop' ? 50 : 45) * sizeMultiplier;
 
   return (
     <div
@@ -156,38 +159,29 @@ export const SketchyBuilding2D = ({
           )}
         </div>
 
-        {/* Level indicator - Larger and more visible */}
+        {/* Status icons - BOTTOM LAYER */}
+        {isLocked && (
+          <div 
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white/95 rounded-full p-4 border-4 border-black shadow-xl" 
+            style={{ filter: 'url(#sketch-outline)', zIndex: 10 }}
+          >
+            <Lock size={36} className="text-gray-700" strokeWidth={3} />
+          </div>
+        )}
+        {isCompleted && (
+          <div className="absolute -top-4 -right-4 bg-white rounded-full p-3 border-4 border-black shadow-lg" style={{ filter: 'url(#sketch-outline)', zIndex: 10 }}>
+            <CheckCircle2 size={28} className="text-green-500" strokeWidth={3} />
+          </div>
+        )}
+
+        {/* Level indicator - MIDDLE LAYER */}
         <div
-          className="absolute -top-8 left-1/2 -translate-x-1/2 w-12 h-12 rounded-full border-4 border-black bg-gradient-to-br from-yellow-300 via-yellow-400 to-orange-500 flex items-center justify-center font-black text-xl shadow-xl"
-          style={{ filter: 'url(#sketch-outline)', zIndex: 100 }}
+          className="absolute -top-10 left-1/2 -translate-x-1/2 w-14 h-14 rounded-full border-5 border-black bg-gradient-to-br from-yellow-300 via-yellow-400 to-orange-500 flex items-center justify-center font-black text-2xl shadow-2xl"
+          style={{ filter: 'url(#sketch-outline)', zIndex: 50 }}
         >
           <span className="text-black drop-shadow-md">{level}</span>
         </div>
 
-        {/* Status icons */}
-        {isLocked && (
-          <div 
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white/95 rounded-full p-3 border-4 border-black shadow-xl" 
-            style={{ filter: 'url(#sketch-outline)', zIndex: 50 }}
-          >
-            <Lock size={32} className="text-gray-700" strokeWidth={3} />
-          </div>
-        )}
-        {isCompleted && (
-          <div className="absolute -top-3 -right-3 bg-white rounded-full p-2 border-3 border-black shadow-lg" style={{ filter: 'url(#sketch-outline)', zIndex: 50 }}>
-            <CheckCircle2 size={24} className="text-green-500" strokeWidth={3} />
-          </div>
-        )}
-
-        {/* Active indicator */}
-        {isActive && !isLocked && (
-          <div
-            className="absolute -top-12 left-1/2 -translate-x-1/2 animate-bounce drop-shadow-lg"
-            style={{ filter: 'url(#sketch-wobble)', fontSize: '32px', zIndex: 50 }}
-          >
-            ⬇️
-          </div>
-        )}
       </div>
     </div>
   );

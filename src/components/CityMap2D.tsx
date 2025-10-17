@@ -35,11 +35,11 @@ export const CityMap2D = ({ onBossClick, onLevelClick }: CityMap2DProps) => {
     return { x, y };
   };
 
-  // Initialize character position
+  // Initialize character position - Always start at Level 1
   useEffect(() => {
-    const initialPos = getSnakePosition(Math.max(1, currentLevel));
+    const initialPos = getSnakePosition(1);
     setCharacterPos(initialPos);
-  }, [currentLevel]);
+  }, []);
 
   const handleBuildingClick = (level: number) => {
     if (level === 10 && completedLevels.includes(9)) {
@@ -99,7 +99,7 @@ export const CityMap2D = ({ onBossClick, onLevelClick }: CityMap2DProps) => {
   };
 
   return (
-    <div className="relative w-full h-screen overflow-auto" style={{ background: 'linear-gradient(to bottom, #87CEEB 0%, #98D8F4 30%, #F5E6D3 70%, #7FD67E 100%)' }}>
+    <div className="relative w-full h-screen overflow-hidden" style={{ background: 'linear-gradient(to bottom, #87CEEB 0%, #98D8F4 30%, #F5E6D3 70%, #98FB98 100%)' }}>
       <SketchFilter />
 
       {/* Decorative clouds */}
@@ -150,29 +150,36 @@ export const CityMap2D = ({ onBossClick, onLevelClick }: CityMap2DProps) => {
         ☀️
       </div>
 
-      {/* Main game area */}
-      <div className="relative w-full" style={{ minHeight: '1000px', paddingTop: '120px', paddingBottom: '100px' }}>
-        {/* Ground with grass texture */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background: 'linear-gradient(to bottom, #48BB78 0%, #38A169 50%, #2F855A 100%)',
-            minHeight: '100%'
-          }}
-        >
-          {/* Grass stipple effect */}
-          <div className="absolute inset-0" style={{ background: 'url(#stipple-grass)', opacity: 0.3 }} />
-        </div>
+      {/* Main game area - Scrollable container */}
+      <div className="relative w-full h-full overflow-y-auto">
+        <div className="relative w-full" style={{ minHeight: '900px', paddingTop: '150px', paddingBottom: '100px' }}>
+          {/* Decorative flowers scattered in grass */}
+          {[...Array(15)].map((_, i) => (
+            <div
+              key={`flower-${i}`}
+              className="absolute text-3xl"
+              style={{
+                left: `${5 + i * 6}%`,
+                top: `${60 + (i % 5) * 8}%`,
+                filter: 'url(#sketch-wobble)',
+                animation: `float ${6 + (i % 3) * 2}s infinite ease-in-out`,
+                animationDelay: `${i * 0.3}s`,
+                zIndex: 3
+              }}
+            >
+              {['🌸', '🌺', '🌻', '🌼', '🌷'][i % 5]}
+            </div>
+          ))}
 
-        {/* Roads connecting buildings in snake pattern */}
-        {Array.from({ length: 9 }, (_, i) => {
-          const start = getSnakePosition(i + 1);
-          const end = getSnakePosition(i + 2);
-          return <SketchyRoad2D key={`road-${i}`} start={start} end={end} width={35} />;
-        })}
+          {/* Roads connecting buildings in snake pattern */}
+          {Array.from({ length: 9 }, (_, i) => {
+            const start = getSnakePosition(i + 1);
+            const end = getSnakePosition(i + 2);
+            return <SketchyRoad2D key={`road-${i}`} start={start} end={end} width={35} />;
+          })}
 
-        {/* Buildings */}
-        {Array.from({ length: 10 }, (_, i) => {
+          {/* Buildings */}
+          {Array.from({ length: 10 }, (_, i) => {
           const level = i + 1;
           const position = getSnakePosition(level);
           const isLocked = level > currentLevel;
@@ -180,66 +187,67 @@ export const CityMap2D = ({ onBossClick, onLevelClick }: CityMap2DProps) => {
           const isCompleted = completedLevels.includes(level);
           const isBoss = level === 10;
 
-          return (
-            <div key={level}>
-              <SketchyBuilding2D
-                level={level}
-                position={position}
-                isLocked={isLocked}
-                isActive={isActive}
-                isCompleted={isCompleted}
-                isBoss={isBoss}
-                onClick={() => handleBuildingClick(level)}
-              />
-
-              {/* Trees around each building */}
-              <SketchyTree2D
-                position={{ x: position.x + 50, y: position.y + 30 }}
-                scale={0.8}
-                type="oak"
-              />
-              <SketchyTree2D
-                position={{ x: position.x - 45, y: position.y + 35 }}
-                scale={0.7}
-                type="pine"
-              />
-              {level % 3 === 0 && (
-                <SketchyTree2D
-                  position={{ x: position.x + 30, y: position.y - 40 }}
-                  scale={0.9}
-                  type="palm"
+            return (
+              <div key={level}>
+                <SketchyBuilding2D
+                  level={level}
+                  position={position}
+                  isLocked={isLocked}
+                  isActive={isActive}
+                  isCompleted={isCompleted}
+                  isBoss={isBoss}
+                  onClick={() => handleBuildingClick(level)}
                 />
-              )}
-            </div>
-          );
-        })}
 
-        {/* Additional decorative trees - More scattered */}
-        <SketchyTree2D position={{ x: 100, y: 300 }} scale={1.3} type="oak" />
-        <SketchyTree2D position={{ x: 850, y: 280 }} scale={1.2} type="pine" />
-        <SketchyTree2D position={{ x: 150, y: 450 }} scale={1.0} type="palm" />
-        <SketchyTree2D position={{ x: 950, y: 420 }} scale={1.1} type="oak" />
-        <SketchyTree2D position={{ x: 500, y: 250 }} scale={0.9} type="pine" />
-        <SketchyTree2D position={{ x: 1100, y: 350 }} scale={1.2} type="palm" />
-        <SketchyTree2D position={{ x: 250, y: 550 }} scale={1.0} type="oak" />
-        <SketchyTree2D position={{ x: 750, y: 580 }} scale={1.1} type="pine" />
+                {/* Trees around each building */}
+                <SketchyTree2D
+                  position={{ x: position.x + 50, y: position.y + 30 }}
+                  scale={0.8}
+                  type="oak"
+                />
+                <SketchyTree2D
+                  position={{ x: position.x - 45, y: position.y + 35 }}
+                  scale={0.7}
+                  type="pine"
+                />
+                {level % 3 === 0 && (
+                  <SketchyTree2D
+                    position={{ x: position.x + 30, y: position.y - 40 }}
+                    scale={0.9}
+                    type="palm"
+                  />
+                )}
+              </div>
+            );
+          })}
 
-        {/* Character */}
-        <SketchyCharacter2D
-          position={characterPos}
-          state={characterState}
-          direction={characterDirection}
-        />
+          {/* Additional decorative trees - More scattered */}
+          <SketchyTree2D position={{ x: 100, y: 300 }} scale={1.3} type="oak" />
+          <SketchyTree2D position={{ x: 850, y: 280 }} scale={1.2} type="pine" />
+          <SketchyTree2D position={{ x: 150, y: 450 }} scale={1.0} type="palm" />
+          <SketchyTree2D position={{ x: 950, y: 420 }} scale={1.1} type="oak" />
+          <SketchyTree2D position={{ x: 500, y: 250 }} scale={0.9} type="pine" />
+          <SketchyTree2D position={{ x: 1100, y: 350 }} scale={1.2} type="palm" />
+          <SketchyTree2D position={{ x: 250, y: 550 }} scale={1.0} type="oak" />
+          <SketchyTree2D position={{ x: 750, y: 580 }} scale={1.1} type="pine" />
 
-        {/* Particles */}
-        {particles.map(particle => (
-          <SketchyParticle
-            key={particle.id}
-            position={particle.pos}
-            type={particle.type}
-            onComplete={() => removeParticle(particle.id)}
+          {/* Character */}
+          <SketchyCharacter2D
+            position={characterPos}
+            state={characterState}
+            direction={characterDirection}
           />
-        ))}
+
+          {/* Particles */}
+          {particles.map(particle => (
+            <SketchyParticle
+              key={particle.id}
+              position={particle.pos}
+              type={particle.type}
+              onComplete={() => removeParticle(particle.id)}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
