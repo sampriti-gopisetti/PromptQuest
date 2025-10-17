@@ -48,7 +48,7 @@ export const QuestionModal = ({ open, onClose, level, onSubmit }: QuestionModalP
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[600px] border-4 border-black" style={{ filter: 'url(#sketch-outline)' }}>
+      <DialogContent className="sm:max-w-[600px] border-4 border-black" style={{ filter: 'url(#sketch-outline)', zIndex: 9999 }}>
         <DialogHeader>
           <DialogTitle className="text-2xl font-black text-center">
             Level {level} Challenge

@@ -28,16 +28,22 @@ export const CityMap2D = ({ onBossClick, onLevelClick }: CityMap2DProps) => {
     
     // Alternate direction per row (snake pattern) - horizontal
     const x = row % 2 === 0 
-      ? 100 + col * colWidth 
-      : 100 + (4 - col) * colWidth;
+      ? 50 + col * colWidth 
+      : 50 + (4 - col) * colWidth;
     const y = 80 + row * rowHeight; // Start from top
     
     return { x, y };
   };
 
-  // Initialize character position - Always start at Level 1
+  // Starting position BEFORE Level 1
+  const getStartPosition = (): { x: number; y: number } => {
+    const level1Pos = getSnakePosition(1);
+    return { x: level1Pos.x - 150, y: level1Pos.y };
+  };
+
+  // Initialize character position - Start before Level 1
   useEffect(() => {
-    const initialPos = getSnakePosition(1);
+    const initialPos = getStartPosition();
     setCharacterPos(initialPos);
   }, []);
 
@@ -141,7 +147,7 @@ export const CityMap2D = ({ onBossClick, onLevelClick }: CityMap2DProps) => {
       <div
         className="absolute text-yellow-400 text-7xl"
         style={{
-          right: '10%',
+          left: '15%',
           top: '5%',
           filter: 'url(#sketch-wobble) drop-shadow(0 0 30px rgba(255,255,0,0.6))',
           zIndex: 5
@@ -150,9 +156,26 @@ export const CityMap2D = ({ onBossClick, onLevelClick }: CityMap2DProps) => {
         ☀️
       </div>
 
+      {/* Flowers in grass area */}
+      {[...Array(18)].map((_, i) => (
+        <div
+          key={`flower-${i}`}
+          className="absolute text-4xl"
+          style={{
+            left: `${5 + i * 5}%`,
+            bottom: `${5 + (i % 4) * 5}%`,
+            filter: 'url(#sketch-wobble)',
+            zIndex: 5,
+            transform: `rotate(${(i % 3) * 15 - 15}deg)`
+          }}
+        >
+          {i % 3 === 0 ? '🌸' : i % 3 === 1 ? '🌼' : '🌺'}
+        </div>
+      ))}
+
       {/* Main game area - No scrolling, centered */}
-      <div className="relative w-full h-full overflow-hidden flex items-center justify-center">
-        <div className="relative" style={{ width: '1100px', height: '500px' }}>
+      <div className="relative w-full h-full overflow-hidden flex items-start pt-32 justify-center">
+        <div className="relative" style={{ width: '1000px', height: '500px' }}>
 
           {/* Roads connecting buildings in snake pattern */}
           {Array.from({ length: 9 }, (_, i) => {

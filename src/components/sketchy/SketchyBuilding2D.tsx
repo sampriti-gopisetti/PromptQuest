@@ -29,7 +29,8 @@ export const SketchyBuilding2D = ({
     if (isLocked) return '#9CA3AF';
     if (isCompleted) return '#34D399';
     if (isActive) return '#60A5FA';
-    return buildingColors[(level - 1) % buildingColors.length];
+    if (isBoss) return '#3b82f6'; // Blue for boss building
+    return '#22c55e'; // Green for all other buildings
   };
 
   const getBuildingType = () => {
@@ -145,10 +146,10 @@ export const SketchyBuilding2D = ({
         {/* Tiny lock above level - BOTTOM LAYER */}
         {isLocked && (
           <div 
-            className="absolute -top-24 left-1/2 -translate-x-1/2" 
-            style={{ filter: 'url(#sketch-outline)', zIndex: 10 }}
+            className="absolute -top-16 left-1/2 -translate-x-1/2" 
+            style={{ filter: 'url(#sketch-outline)', zIndex: 60 }}
           >
-            <Lock size={14} className="text-gray-700" strokeWidth={2.5} />
+            <Lock size={16} className="text-gray-700" strokeWidth={2.5} />
           </div>
         )}
         {isCompleted && (
