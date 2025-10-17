@@ -7,6 +7,7 @@ import { BossWarningDialog } from '@/components/BossWarningDialog';
 import { CelebrationFireworks } from '@/components/CelebrationFireworks';
 import { QuestionModal } from '@/components/QuestionModal';
 import { FeedbackModal } from '@/components/FeedbackModal';
+import LoadingOverlay from '@/components/LoadingOverlay';
 import { useGameState } from '@/hooks/useGameState';
 import { evaluatePrompt } from '@/lib/api';
 import { toast } from '@/hooks/use-toast';
@@ -168,6 +169,9 @@ const Index = () => {
       {showCelebration && (
         <CelebrationFireworks onComplete={() => setShowCelebration(false)} />
       )}
+
+      {/* Global submitting overlay */}
+      <LoadingOverlay show={isSubmitting} message="AI Guru is working..." />
     </main>
   );
 };

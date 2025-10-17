@@ -9,7 +9,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { Lightbulb, Loader2 } from 'lucide-react';
+import { Lightbulb } from 'lucide-react';
 
 interface QuestionModalProps {
   open: boolean;
@@ -116,7 +116,7 @@ export const QuestionModal = ({ open, onClose, level, onSubmit, isSubmitting = f
             className="w-full text-lg font-bold py-6 bg-gradient-to-r from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 border-3 border-black animate-pulse hover:animate-none"
             style={{ filter: 'url(#sketch-outline)' }}
           >
-            {isSubmitting ? (<><Loader2 className="mr-2 h-5 w-5 animate-spin" /> Submitting...</>) : 'Submit'}
+            Submit
           </Button>
         </DialogFooter>
       </DialogContent>
