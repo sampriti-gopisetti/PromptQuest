@@ -30,7 +30,7 @@ export const CityMap2D = ({ onBossClick, onLevelClick }: CityMap2DProps) => {
     const x = row % 2 === 0 
       ? 50 + col * colWidth 
       : 50 + (4 - col) * colWidth;
-    const y = 80 + row * rowHeight; // Start from top
+    const y = 100 + row * rowHeight; // Start from top
     
     return { x, y };
   };
@@ -147,7 +147,7 @@ export const CityMap2D = ({ onBossClick, onLevelClick }: CityMap2DProps) => {
       <div
         className="absolute text-yellow-400 text-7xl"
         style={{
-          left: '15%',
+          right: '20%',
           top: '5%',
           filter: 'url(#sketch-wobble) drop-shadow(0 0 30px rgba(255,255,0,0.6))',
           zIndex: 5
