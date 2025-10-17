@@ -20,7 +20,7 @@ const Index = () => {
   const [currentQuestion, setCurrentQuestion] = useState('');
   const [submittedAnswer, setSubmittedAnswer] = useState('');
   const [earnedScore, setEarnedScore] = useState(0);
-  const { points, currentLevel, completeLevel, unlockNextLevel } = useGameState();
+  const { points, currentLevel, completedLevels, completeLevel, unlockNextLevel } = useGameState();
 
   const handleBossClick = () => {
     setShowBossWarning(true);
@@ -36,6 +36,18 @@ const Index = () => {
   const handleLevelClick = (level: number) => {
     setCurrentQuestionLevel(level);
     setShowQuestionModal(true);
+  };
+
+  const handleCharacterArrival = (level: number) => {
+    // After character arrives, auto-open the appropriate modal
+    if (level === 10 && completedLevels.includes(9)) {
+      // Boss level - show warning
+      setShowBossWarning(true);
+    } else if (level <= 10) {
+      // Regular level - show question modal
+      setCurrentQuestionLevel(level);
+      setShowQuestionModal(true);
+    }
   };
 
   const handleAnswerSubmit = (answer: string, question: string) => {
@@ -66,25 +78,29 @@ const Index = () => {
       completeLevel(currentQuestionLevel, earnedScore);
       unlockNextLevel();
       
-      // After character movement animation (~1 second), show celebration
-      setTimeout(() => {
-        setShowCelebration(true);
-        
-        toast({
-          title: '✅ Level Complete!',
-          description: `+${earnedScore} points earned`,
-        });
-        
-        // Reset current question level
-        setCurrentQuestionLevel(null);
-      }, 1000);
+    // After character movement animation (~3 seconds), show celebration
+    setTimeout(() => {
+      setShowCelebration(true);
+      
+      toast({
+        title: '✅ Level Complete!',
+        description: `+${earnedScore} points earned`,
+      });
+      
+      // Reset current question level
+      setCurrentQuestionLevel(null);
+    }, 3000);
     }, 300);
   };
 
   return (
     <main className="relative w-screen h-screen overflow-hidden bg-sky-200">
       {/* 2D City Map */}
-      <CityMap2D onBossClick={handleBossClick} onLevelClick={handleLevelClick} />
+      <CityMap2D 
+        onBossClick={handleBossClick} 
+        onLevelClick={handleLevelClick}
+        onCharacterArrival={handleCharacterArrival}
+      />
 
       {/* UI Overlays */}
       <PlayerStatus points={points} level={currentLevel} />

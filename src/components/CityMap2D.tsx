@@ -11,9 +11,10 @@ import { useState, useEffect } from 'react';
 interface CityMap2DProps {
   onBossClick: () => void;
   onLevelClick: (level: number) => void;
+  onCharacterArrival?: (level: number) => void;
 }
 
-export const CityMap2D = ({ onBossClick, onLevelClick }: CityMap2DProps) => {
+export const CityMap2D = ({ onBossClick, onLevelClick, onCharacterArrival }: CityMap2DProps) => {
   const { currentLevel, completedLevels } = useGameState();
   const [characterPos, setCharacterPos] = useState({ x: 0, y: 0 });
   const [characterState, setCharacterState] = useState<'idle' | 'running' | 'entering' | 'celebrating'>('idle');
@@ -48,15 +49,71 @@ export const CityMap2D = ({ onBossClick, onLevelClick }: CityMap2DProps) => {
     setCharacterPos(initialPos);
   }, []);
 
+  // Auto-move character when currentLevel changes
+  useEffect(() => {
+    if (currentLevel > 1) {
+      const targetPos = getSnakePosition(currentLevel);
+      const currentPos = characterPos;
+      
+      // Only move if we're not already at the target
+      if (Math.abs(currentPos.x - targetPos.x) > 10 || Math.abs(currentPos.y - targetPos.y) > 10) {
+        setCharacterDirection(targetPos.x > currentPos.x ? 'right' : 'left');
+        setCharacterState('running');
+
+        // Create dust particles during movement
+        const dustInterval = setInterval(() => {
+          setParticles(prev => [...prev, {
+            id: Date.now() + Math.random(),
+            pos: { ...characterPos },
+            type: 'dust'
+          }]);
+        }, 100);
+
+        // Move character to new level
+        setTimeout(() => {
+          setCharacterPos(targetPos);
+          
+          setTimeout(() => {
+            clearInterval(dustInterval);
+            setCharacterState('entering');
+            
+            setTimeout(() => {
+              setCharacterState('celebrating');
+              
+              // Create celebration particles
+              for (let i = 0; i < 10; i++) {
+                setTimeout(() => {
+                  setParticles(prev => [...prev, {
+                    id: Date.now() + Math.random(),
+                    pos: targetPos,
+                    type: Math.random() > 0.5 ? 'confetti' : 'sparkle'
+                  }]);
+                }, i * 100);
+              }
+              
+              setTimeout(() => {
+                setCharacterState('idle');
+                // Auto-trigger modal opening
+                if (onCharacterArrival) {
+                  onCharacterArrival(currentLevel);
+                }
+              }, 1500);
+            }, 500);
+          }, 2000);
+        }, 100);
+      }
+    }
+  }, [currentLevel]);
+
   const handleBuildingClick = (level: number) => {
     if (level === 10 && completedLevels.includes(9)) {
-      moveCharacterToBuilding(level, onBossClick);
+      moveCharacterToBuilding(level);
     } else if (level === currentLevel) {
-      moveCharacterToBuilding(level, () => onLevelClick(level));
+      moveCharacterToBuilding(level);
     }
   };
 
-  const moveCharacterToBuilding = (level: number, callback: () => void) => {
+  const moveCharacterToBuilding = (level: number) => {
     const targetPos = getSnakePosition(level);
     setCharacterDirection(targetPos.x > characterPos.x ? 'right' : 'left');
     setCharacterState('running');
@@ -79,7 +136,6 @@ export const CityMap2D = ({ onBossClick, onLevelClick }: CityMap2DProps) => {
         setCharacterState('entering');
         
         setTimeout(() => {
-          callback();
           setCharacterState('celebrating');
           
           // Create celebration particles
@@ -95,6 +151,10 @@ export const CityMap2D = ({ onBossClick, onLevelClick }: CityMap2DProps) => {
           
           setTimeout(() => {
             setCharacterState('idle');
+            // Auto-trigger modal opening
+            if (onCharacterArrival) {
+              onCharacterArrival(level);
+            }
           }, 1500);
         }, 500);
       }, 2000);
