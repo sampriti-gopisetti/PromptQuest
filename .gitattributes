@@ -1,0 +1,15 @@
+# Ensure LF normalization for text; Git will handle CRLF on Windows checkouts
+* text=auto
+
+# Treat common binary formats as binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.pdf binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+
+# Keep notebooks as binary to avoid noisy diffs
+*.ipynb binary
