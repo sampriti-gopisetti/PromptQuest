@@ -156,22 +156,20 @@ export const SketchyBuilding2D = ({
           )}
         </div>
 
-        {/* Tiny lock above level - BOTTOM LAYER */}
-        {isLocked && (
-          <div 
-            className="absolute -top-16 left-1/2 -translate-x-1/2" 
-            style={{ filter: 'url(#sketch-outline)', zIndex: 60 }}
-          >
-            <Lock size={16} className="text-gray-700" strokeWidth={2.5} />
-          </div>
-        )}
-
-        {/* Level indicator - MIDDLE LAYER */}
+        {/* Level indicator */}
         <div
-          className="absolute -top-10 left-1/2 -translate-x-1/2 w-14 h-14 rounded-full border-5 border-black bg-gradient-to-br from-yellow-300 via-yellow-400 to-orange-500 flex items-center justify-center font-black text-2xl shadow-2xl"
+          className={`absolute -top-10 left-1/2 -translate-x-1/2 w-14 h-14 rounded-full border-5 border-black flex items-center justify-center font-black text-2xl shadow-2xl ${
+            isLocked 
+              ? 'bg-gradient-to-br from-gray-300 via-gray-400 to-gray-500' 
+              : 'bg-gradient-to-br from-yellow-300 via-yellow-400 to-orange-500'
+          }`}
           style={{ filter: 'url(#sketch-outline)', zIndex: 50 }}
         >
-          <span className="text-black drop-shadow-md">{level}</span>
+          {isLocked ? (
+            <Lock size={24} className="text-gray-700" strokeWidth={3} />
+          ) : (
+            <span className="text-black drop-shadow-md">{level}</span>
+          )}
         </div>
 
       </div>
