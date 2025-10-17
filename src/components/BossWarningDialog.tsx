@@ -58,7 +58,7 @@ export const BossWarningDialog = ({ open, onAccept, onCancel }: BossWarningDialo
           </AlertDialogCancel>
           <AlertDialogAction
             onClick={onAccept}
-            className="flex-1 bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:from-green-500 hover:via-green-600 hover:to-green-700 text-white font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300 animate-pulse hover:scale-105"
+            className="flex-1 bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:from-green-500 hover:via-green-600 hover:to-green-700 text-white font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-500 animate-pulse hover:scale-105"
           >
             🎯 Accept Challenge! 🎯
           </AlertDialogAction>

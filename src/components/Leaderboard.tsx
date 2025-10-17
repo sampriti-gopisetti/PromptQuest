@@ -65,7 +65,7 @@ export const Leaderboard = ({ open, onClose }: LeaderboardProps) => {
             <div
               key={entry.rank}
               className={cn(
-                'p-4 rounded-lg border-2 bg-gradient-to-r transition-all duration-300',
+                'p-4 rounded-lg border-2 bg-gradient-to-r transition-all duration-500',
                 getRankColor(entry.rank),
                 entry.isCurrentPlayer && 'ring-2 ring-primary shadow-lg scale-105',
                 'animate-fade-in'

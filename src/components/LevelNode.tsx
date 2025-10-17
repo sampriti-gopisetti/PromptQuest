@@ -29,7 +29,7 @@ export const LevelNode = ({
 
   return (
     <div
-      className="absolute cursor-pointer transition-all duration-300 group"
+      className="absolute cursor-pointer transition-all duration-500 group"
       style={{
         left: `${position.x}px`,
         top: `${position.y}px`,
@@ -63,7 +63,7 @@ export const LevelNode = ({
       {/* Main node */}
       <div
         className={cn(
-          'relative rounded-full border-2 backdrop-blur-sm transition-all duration-300',
+          'relative rounded-full border-2 backdrop-blur-sm transition-all duration-500',
           'flex items-center justify-center',
           'group-hover:scale-110 group-hover:brightness-125',
           state === 'locked' && 'border-muted bg-muted/20',
@@ -152,7 +152,7 @@ export const LevelNode = ({
 
       {/* Hover effect rings */}
       <div
-        className="absolute inset-0 rounded-full border border-primary/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+        className="absolute inset-0 rounded-full border border-primary/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
         style={{
           width: `${actualSize + 30}px`,
           height: `${actualSize + 30}px`,

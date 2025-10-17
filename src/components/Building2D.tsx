@@ -54,7 +54,7 @@ export const Building2D = ({
   return (
     <div
       className={cn(
-        "absolute transition-all duration-300 cursor-pointer group",
+        "absolute transition-all duration-500 cursor-pointer group",
         isActive && "animate-pulse",
         isLocked && "opacity-60 cursor-not-allowed"
       )}
