@@ -31,7 +31,7 @@ export const FeedbackModal = ({
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent 
-        className="sm:max-w-[700px] border-4 border-black" 
+        className="sm:max-w-[500px] border-4 border-black" 
         style={{ filter: 'url(#sketch-outline)', zIndex: 9999 }}
       >
         <DialogHeader>
@@ -40,14 +40,14 @@ export const FeedbackModal = ({
           </DialogTitle>
         </DialogHeader>
 
-        <div className="space-y-6 py-4">
+        <div className="space-y-4 py-2">
           {/* Question Display */}
           <div className="space-y-2">
             <Label className="text-lg font-bold">
               Question:
             </Label>
             <div
-              className="p-4 rounded-lg border-3 border-black bg-blue-100 min-h-[80px] flex items-center text-base text-black"
+              className="p-3 rounded-lg border-3 border-black bg-blue-100 min-h-[60px] flex items-center text-base text-black"
               style={{ filter: 'url(#sketch-outline)' }}
             >
               {question}
@@ -60,7 +60,7 @@ export const FeedbackModal = ({
               Your Answer:
             </Label>
             <div
-              className="p-4 rounded-lg border-3 border-black bg-gray-100 min-h-[80px] flex items-center text-base text-black"
+              className="p-3 rounded-lg border-3 border-black bg-gray-100 min-h-[60px] flex items-center text-base text-black"
               style={{ filter: 'url(#sketch-outline)' }}
             >
               {userAnswer}
@@ -73,7 +73,7 @@ export const FeedbackModal = ({
               Feedback:
             </Label>
             <div
-              className="p-4 rounded-lg border-3 border-black bg-green-100 min-h-[60px] flex items-center text-base text-black"
+              className="p-3 rounded-lg border-3 border-black bg-green-100 min-h-[50px] flex items-center text-base text-black"
               style={{ filter: 'url(#sketch-outline)' }}
             >
               {score >= 400 
@@ -92,7 +92,7 @@ export const FeedbackModal = ({
               Score Earned:
             </Label>
             <div
-              className="p-4 rounded-lg border-3 border-black bg-purple-100 min-h-[80px] flex items-center justify-center text-3xl font-black text-black"
+              className="p-3 rounded-lg border-3 border-black bg-purple-100 min-h-[60px] flex items-center justify-center text-2xl font-black text-black"
               style={{ filter: 'url(#sketch-outline)' }}
             >
               🎉 +{score} points
@@ -103,7 +103,7 @@ export const FeedbackModal = ({
         <DialogFooter>
           <Button
             onClick={onNextLevel}
-            className="w-full text-xl font-bold py-6 bg-gradient-to-r from-purple-400 to-purple-600 hover:from-purple-500 hover:to-purple-700 border-3 border-black animate-pulse hover:animate-none"
+            className="w-full text-lg font-bold py-4 bg-gradient-to-r from-purple-400 to-purple-600 hover:from-purple-500 hover:to-purple-700 border-3 border-black animate-pulse hover:animate-none"
             style={{ filter: 'url(#sketch-outline)' }}
           >
             Next Level

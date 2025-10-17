@@ -63,7 +63,7 @@ export const QuestionModal = ({ open, onClose, level, onSubmit }: QuestionModalP
             </Label>
             <div
               id="question"
-              className="p-4 rounded-lg border-3 border-black bg-blue-50 min-h-[100px] flex items-center text-lg font-semibold"
+              className="p-4 rounded-lg border-3 border-black bg-blue-50 min-h-[100px] flex items-center text-lg font-semibold text-black"
               style={{ filter: 'url(#sketch-outline)' }}
             >
               {currentQuestion.question}
@@ -99,7 +99,7 @@ export const QuestionModal = ({ open, onClose, level, onSubmit }: QuestionModalP
             </Button>
             {showHint && (
               <div
-                className="p-4 rounded-lg border-3 border-black bg-yellow-50 text-base italic"
+                className="p-4 rounded-lg border-3 border-black bg-yellow-50 text-base italic text-black"
                 style={{ filter: 'url(#sketch-outline)' }}
               >
                 💡 {currentQuestion.hint}

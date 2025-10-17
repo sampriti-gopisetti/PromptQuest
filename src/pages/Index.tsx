@@ -57,17 +57,14 @@ const Index = () => {
   const handleNextLevel = () => {
     if (currentQuestionLevel === null) return;
 
-    // Complete the level and unlock next
-    completeLevel(currentQuestionLevel, earnedScore);
-    unlockNextLevel();
-
-    // Close feedback modal immediately so user can see the map
+    // Close feedback modal FIRST so user sees the map
     setShowFeedbackModal(false);
 
-    // Small delay to let modal close animation complete
+    // Small delay to let modal close
     setTimeout(() => {
-      // The character movement happens automatically when currentLevel updates
-      // (via unlockNextLevel which already incremented currentLevel)
+      // Now update game state - this triggers character movement
+      completeLevel(currentQuestionLevel, earnedScore);
+      unlockNextLevel();
       
       // After character movement animation (~1 second), show celebration
       setTimeout(() => {
@@ -77,13 +74,11 @@ const Index = () => {
           title: '✅ Level Complete!',
           description: `+${earnedScore} points earned`,
         });
+        
+        // Reset current question level
+        setCurrentQuestionLevel(null);
       }, 1000);
     }, 300);
-
-    // Reset current question level after everything completes
-    setTimeout(() => {
-      setCurrentQuestionLevel(null);
-    }, 2500);
   };
 
   return (
