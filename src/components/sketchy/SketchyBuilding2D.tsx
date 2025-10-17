@@ -47,7 +47,7 @@ export const SketchyBuilding2D = ({
 
   return (
     <div
-      className="absolute cursor-pointer transition-transform hover:scale-105"
+      className="absolute cursor-pointer transition-transform hover:scale-110"
       style={{
         left: `${position.x}px`,
         top: `${position.y}px`,
@@ -56,60 +56,57 @@ export const SketchyBuilding2D = ({
       }}
       onClick={!isLocked ? onClick : undefined}
     >
-      {/* Isometric building container */}
-      <div className="relative" style={{ width: `${baseSize}px`, height: `${height + 30}px` }}>
-        {/* Shadow - sketchy oval */}
+      {/* Building container */}
+      <div className="relative" style={{ width: `${baseSize + 20}px`, height: `${height + 40}px` }}>
+        {/* Shadow */}
         <div
-          className="absolute opacity-30"
+          className="absolute opacity-40"
           style={{
-            bottom: '-10px',
+            bottom: '-5px',
             left: '50%',
             transform: 'translateX(-50%)',
-            width: `${baseSize + 10}px`,
-            height: '8px',
-            background: '#000',
-            borderRadius: '50%',
-            filter: 'url(#sketch-outline) blur(3px)'
+            width: `${baseSize + 20}px`,
+            height: '10px',
+            background: 'radial-gradient(ellipse, rgba(0,0,0,0.5) 0%, transparent 70%)',
+            filter: 'blur(4px)'
           }}
         />
 
-          {/* Isometric building body */}
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2" style={{ transformStyle: 'preserve-3d' }}>
-          {/* Front face */}
+        {/* Simple 3D Block Building */}
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2">
+          {/* Main building block */}
           <div
-            className="relative border-3 border-black"
+            className="relative border-4 border-black rounded-lg"
             style={{
               width: `${baseSize}px`,
               height: `${height}px`,
-              background: color,
-              transform: 'rotateX(60deg) rotateZ(-45deg)',
-              transformOrigin: 'bottom',
+              background: `linear-gradient(135deg, ${color} 0%, ${color}dd 50%, ${color}aa 100%)`,
               filter: 'url(#sketch-outline)',
-              boxShadow: '3px 3px 0 rgba(0,0,0,0.4)',
-              borderRadius: '3px'
+              boxShadow: `
+                inset -4px -4px 8px rgba(0,0,0,0.2),
+                inset 4px 4px 8px rgba(255,255,255,0.3),
+                6px 6px 0 rgba(0,0,0,0.3)
+              `
             }}
           >
-            {/* Cross-hatch shading on left side */}
+            {/* Shading on side */}
             <div
-              className="absolute left-0 top-0 bottom-0 w-2"
-              style={{
-                background: 'url(#crosshatch-dark)',
-                opacity: 0.5
-              }}
+              className="absolute right-0 top-0 bottom-0 w-3 bg-black/20"
+              style={{ filter: 'url(#sketch-outline)' }}
             />
 
             {/* Windows */}
             {type !== 'house' && (
-              <div className="p-2 grid grid-cols-3 gap-1">
+              <div className="p-3 grid grid-cols-3 gap-2">
                 {Array.from({ length: type === 'skyscraper' ? 18 : type === 'office' ? 12 : 9 }).map((_, i) => (
                   <div
                     key={i}
-                    className="bg-black/20 border border-black"
+                    className="bg-cyan-200/80 border-2 border-black rounded-sm"
                     style={{
-                      width: '6px',
-                      height: '8px',
+                      width: '8px',
+                      height: '10px',
                       filter: 'url(#sketch-outline)',
-                      transform: `rotate(${Math.random() * 2 - 1}deg)`
+                      boxShadow: 'inset 1px 1px 2px rgba(255,255,255,0.5)'
                     }}
                   />
                 ))}
@@ -119,84 +116,74 @@ export const SketchyBuilding2D = ({
             {/* Door for houses */}
             {type === 'house' && (
               <div
-                className="absolute bottom-1 left-1/2 -translate-x-1/2 bg-amber-900 border-2 border-black"
+                className="absolute bottom-2 left-1/2 -translate-x-1/2 bg-amber-900 border-3 border-black"
                 style={{
-                  width: '10px',
-                  height: '15px',
+                  width: '14px',
+                  height: '20px',
                   filter: 'url(#sketch-outline)',
-                  borderRadius: '2px 2px 0 0'
+                  borderRadius: '4px 4px 0 0'
                 }}
               />
             )}
-          </div>
 
-          {/* Top face (roof) */}
-          <div
-            className="absolute border-2 border-black"
-            style={{
-              width: `${baseSize}px`,
-              height: `${baseSize * 0.5}px`,
-              background: `linear-gradient(135deg, ${color} 0%, ${color}dd 100%)`,
-              transform: `translateY(-${height}px) rotateX(60deg) rotateZ(-45deg) translateZ(1px)`,
-              transformOrigin: 'bottom',
-              filter: 'url(#sketch-outline)',
-              borderRadius: '2px'
-            }}
-          >
-            {/* Roof details for houses */}
-            {type === 'house' && (
-              <div
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-8 bg-red-800 border border-black"
-                style={{ filter: 'url(#sketch-outline)' }}
-              />
-            )}
+            {/* Roof indicator */}
+            <div
+              className="absolute -top-2 left-0 right-0 h-2 border-2 border-black rounded-t-lg"
+              style={{
+                background: `linear-gradient(90deg, ${color}dd 0%, ${color}aa 100%)`,
+                filter: 'url(#sketch-outline)'
+              }}
+            />
           </div>
 
           {/* Boss building special effects */}
           {isBoss && (
             <>
               <div
-                className="absolute -top-4 left-1/2 -translate-x-1/2 text-yellow-400 animate-pulse"
-                style={{ filter: 'url(#sketch-wobble)' }}
+                className="absolute -top-8 left-1/2 -translate-x-1/2 text-yellow-400 animate-pulse drop-shadow-lg"
+                style={{ filter: 'url(#sketch-wobble)', fontSize: '32px' }}
               >
-                <Crown size={24} />
+                <Crown size={32} />
               </div>
               {/* Lightning bolts */}
-              <div className="absolute -left-2 top-1/2 text-yellow-300 animate-pulse">
+              <div className="absolute -left-3 top-1/2 text-yellow-300 text-2xl animate-pulse drop-shadow-lg">
                 ⚡
               </div>
-              <div className="absolute -right-2 top-1/3 text-yellow-300 animate-pulse" style={{ animationDelay: '0.5s' }}>
+              <div className="absolute -right-3 top-1/3 text-yellow-300 text-2xl animate-pulse drop-shadow-lg" style={{ animationDelay: '0.5s' }}>
                 ⚡
               </div>
             </>
           )}
         </div>
 
-        {/* Level indicator */}
+        {/* Level indicator - Larger and more visible */}
         <div
-          className="absolute -top-6 left-1/2 -translate-x-1/2 w-10 h-10 rounded-full border-3 border-black bg-gradient-to-br from-yellow-300 to-orange-400 flex items-center justify-center font-bold text-lg shadow-lg"
-          style={{ filter: 'url(#sketch-outline)', zIndex: 10 }}
+          className="absolute -top-8 left-1/2 -translate-x-1/2 w-12 h-12 rounded-full border-4 border-black bg-gradient-to-br from-yellow-300 via-yellow-400 to-orange-500 flex items-center justify-center font-black text-xl shadow-xl"
+          style={{ filter: 'url(#sketch-outline)', zIndex: 100 }}
         >
-          <span className="text-black drop-shadow-sm">{level}</span>
+          <span className="text-black drop-shadow-md">{level}</span>
         </div>
 
         {/* Status icons */}
         {isLocked && (
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-gray-600 bg-white/80 rounded-full p-1 border-2 border-black" style={{ filter: 'url(#sketch-outline)' }}>
-            <Lock size={20} />
+          <div 
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white/95 rounded-full p-3 border-4 border-black shadow-xl" 
+            style={{ filter: 'url(#sketch-outline)', zIndex: 50 }}
+          >
+            <Lock size={32} className="text-gray-700" strokeWidth={3} />
           </div>
         )}
         {isCompleted && (
-          <div className="absolute -top-2 -right-2 text-green-500 bg-white rounded-full p-1 border-2 border-black" style={{ filter: 'url(#sketch-outline)' }}>
-            <CheckCircle2 size={16} />
+          <div className="absolute -top-3 -right-3 bg-white rounded-full p-2 border-3 border-black shadow-lg" style={{ filter: 'url(#sketch-outline)', zIndex: 50 }}>
+            <CheckCircle2 size={24} className="text-green-500" strokeWidth={3} />
           </div>
         )}
 
         {/* Active indicator */}
-        {isActive && (
+        {isActive && !isLocked && (
           <div
-            className="absolute -top-8 left-1/2 -translate-x-1/2 text-blue-500 animate-bounce"
-            style={{ filter: 'url(#sketch-wobble)' }}
+            className="absolute -top-12 left-1/2 -translate-x-1/2 animate-bounce drop-shadow-lg"
+            style={{ filter: 'url(#sketch-wobble)', fontSize: '32px', zIndex: 50 }}
           >
             ⬇️
           </div>

@@ -99,19 +99,20 @@ export const CityMap2D = ({ onBossClick, onLevelClick }: CityMap2DProps) => {
   };
 
   return (
-    <div className="relative w-full h-screen overflow-auto" style={{ background: 'linear-gradient(to bottom, #87CEEB 0%, #E0F2FE 50%, #B4E7CE 100%)' }}>
+    <div className="relative w-full h-screen overflow-auto" style={{ background: 'linear-gradient(to bottom, #87CEEB 0%, #98D8F4 30%, #F5E6D3 70%, #7FD67E 100%)' }}>
       <SketchFilter />
 
       {/* Decorative clouds */}
-      {[...Array(5)].map((_, i) => (
+      {[...Array(8)].map((_, i) => (
         <div
           key={`cloud-${i}`}
-          className="absolute text-white text-6xl opacity-70"
+          className="absolute text-white text-5xl opacity-80 drop-shadow-lg"
           style={{
-            left: `${20 + i * 20}%`,
-            top: `${5 + Math.random() * 10}%`,
+            left: `${10 + i * 12}%`,
+            top: `${3 + (i % 3) * 8}%`,
             filter: 'url(#sketch-wobble)',
-            animation: `float ${10 + i * 2}s infinite ease-in-out`
+            animation: `float ${8 + i * 1.5}s infinite ease-in-out`,
+            zIndex: 5
           }}
         >
           ☁️
@@ -119,34 +120,38 @@ export const CityMap2D = ({ onBossClick, onLevelClick }: CityMap2DProps) => {
       ))}
 
       {/* Flying birds */}
-      {[...Array(3)].map((_, i) => (
+      {[...Array(4)].map((_, i) => (
         <div
           key={`bird-${i}`}
-          className="absolute text-gray-700 text-2xl"
+          className="absolute text-gray-800 text-2xl"
           style={{
-            left: `${-10 + i * 30}%`,
-            top: `${10 + i * 5}%`,
+            left: `${-10 + i * 25}%`,
+            top: `${8 + i * 4}%`,
             filter: 'url(#sketch-outline)',
-            animation: `float ${5 + i}s infinite linear`,
-            animationDelay: `${i * 2}s`
+            animation: `float ${6 + i}s infinite linear`,
+            animationDelay: `${i * 1.5}s`,
+            zIndex: 5
           }}
         >
           🦅
         </div>
       ))}
 
-      {/* Game title */}
-      <div className="absolute top-8 left-1/2 -translate-x-1/2 z-50">
-        <h1 
-          className="text-5xl font-bold text-white drop-shadow-lg border-4 border-black bg-blue-500 px-8 py-3 rounded-lg"
-          style={{ filter: 'url(#sketch-outline)', transform: 'rotate(-2deg)' }}
-        >
-          PROMPT QUEST
-        </h1>
+      {/* Sun */}
+      <div
+        className="absolute text-yellow-400 text-7xl"
+        style={{
+          right: '10%',
+          top: '5%',
+          filter: 'url(#sketch-wobble) drop-shadow(0 0 30px rgba(255,255,0,0.6))',
+          zIndex: 5
+        }}
+      >
+        ☀️
       </div>
 
       {/* Main game area */}
-      <div className="relative w-full" style={{ minHeight: '800px', paddingBottom: '100px' }}>
+      <div className="relative w-full" style={{ minHeight: '1000px', paddingTop: '120px', paddingBottom: '100px' }}>
         {/* Ground with grass texture */}
         <div
           className="absolute inset-0"
@@ -209,10 +214,15 @@ export const CityMap2D = ({ onBossClick, onLevelClick }: CityMap2DProps) => {
           );
         })}
 
-        {/* Additional decorative trees */}
-        <SketchyTree2D position={{ x: 100, y: 400 }} scale={1.2} type="oak" />
-        <SketchyTree2D position={{ x: 600, y: 350 }} scale={1.1} type="pine" />
-        <SketchyTree2D position={{ x: 150, y: 200 }} scale={0.9} type="palm" />
+        {/* Additional decorative trees - More scattered */}
+        <SketchyTree2D position={{ x: 100, y: 300 }} scale={1.3} type="oak" />
+        <SketchyTree2D position={{ x: 850, y: 280 }} scale={1.2} type="pine" />
+        <SketchyTree2D position={{ x: 150, y: 450 }} scale={1.0} type="palm" />
+        <SketchyTree2D position={{ x: 950, y: 420 }} scale={1.1} type="oak" />
+        <SketchyTree2D position={{ x: 500, y: 250 }} scale={0.9} type="pine" />
+        <SketchyTree2D position={{ x: 1100, y: 350 }} scale={1.2} type="palm" />
+        <SketchyTree2D position={{ x: 250, y: 550 }} scale={1.0} type="oak" />
+        <SketchyTree2D position={{ x: 750, y: 580 }} scale={1.1} type="pine" />
 
         {/* Character */}
         <SketchyCharacter2D

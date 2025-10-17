@@ -32,19 +32,19 @@ export const SketchyCharacter2D = ({
         zIndex: Math.floor(position.y / 2) + 100
       }}
     >
-      {/* Character body - simple blob with sketchy outline */}
+      {/* Character body - larger and more visible */}
       <div className="relative">
         {/* Dust clouds when running */}
         {state === 'running' && (
           <>
             <div
-              className="absolute -left-8 top-4 text-gray-400 text-xl animate-ping"
+              className="absolute -left-10 top-6 text-gray-400 text-3xl animate-ping"
               style={{ filter: 'url(#sketch-outline)', animationDuration: '0.5s' }}
             >
               💨
             </div>
             <div
-              className="absolute -left-12 top-6 text-gray-400 text-sm animate-ping"
+              className="absolute -left-16 top-8 text-gray-400 text-2xl animate-ping"
               style={{ filter: 'url(#sketch-outline)', animationDuration: '0.7s', animationDelay: '0.1s' }}
             >
               💨
@@ -52,96 +52,105 @@ export const SketchyCharacter2D = ({
           </>
         )}
 
-        {/* Main character body */}
+        {/* Main character body - BIGGER */}
         <div
-          className="relative bg-gradient-to-br from-blue-400 to-blue-600 border-3 border-black rounded-full shadow-lg"
+          className="relative border-4 border-black rounded-full shadow-2xl"
           style={{
-            width: '40px',
-            height: '48px',
+            width: '56px',
+            height: '64px',
+            background: 'linear-gradient(135deg, #60A5FA 0%, #3B82F6 50%, #2563EB 100%)',
             filter: 'url(#sketch-outline)',
-            transform: `rotate(${wobble}deg) scale(${state === 'entering' ? 0.5 : state === 'celebrating' ? 1.3 : 1})`,
-            transition: 'transform 0.3s ease-out'
+            transform: `rotate(${wobble}deg) scale(${state === 'entering' ? 0.5 : state === 'celebrating' ? 1.4 : 1})`,
+            transition: 'transform 0.3s ease-out',
+            boxShadow: '0 8px 16px rgba(0,0,0,0.3), inset -3px -3px 6px rgba(0,0,0,0.2), inset 3px 3px 6px rgba(255,255,255,0.3)'
           }}
         >
-          {/* Eyes */}
-          <div className="absolute top-2 left-1/2 -translate-x-1/2 flex gap-1">
+          {/* Eyes - BIGGER */}
+          <div className="absolute top-3 left-1/2 -translate-x-1/2 flex gap-2">
             <div
-              className="w-2 h-2 bg-black rounded-full"
+              className="w-3 h-3 bg-white rounded-full border-2 border-black"
               style={{ 
                 filter: 'url(#sketch-outline)',
                 transform: state === 'celebrating' ? 'scaleY(0.3)' : 'scaleY(1)'
               }}
-            />
+            >
+              <div className="w-1.5 h-1.5 bg-black rounded-full absolute bottom-0 left-1/2 -translate-x-1/2" />
+            </div>
             <div
-              className="w-2 h-2 bg-black rounded-full"
+              className="w-3 h-3 bg-white rounded-full border-2 border-black"
               style={{ 
                 filter: 'url(#sketch-outline)',
                 transform: state === 'celebrating' ? 'scaleY(0.3)' : 'scaleY(1)'
               }}
-            />
+            >
+              <div className="w-1.5 h-1.5 bg-black rounded-full absolute bottom-0 left-1/2 -translate-x-1/2" />
+            </div>
           </div>
 
-          {/* Mouth */}
+          {/* Mouth - BIGGER */}
           <div
-            className="absolute top-5 left-1/2 -translate-x-1/2 w-3 h-1 bg-black rounded-full"
+            className="absolute top-8 left-1/2 -translate-x-1/2 w-4 h-2 border-b-3 border-black rounded-b-full"
             style={{
               filter: 'url(#sketch-outline)',
-              transform: state === 'celebrating' ? 'scaleX(1.5)' : 'scaleX(1)'
+              transform: state === 'celebrating' ? 'scaleX(1.8)' : 'scaleX(1)',
+              borderColor: state === 'celebrating' ? '#000' : '#000'
             }}
           />
 
-          {/* Arms */}
+          {/* Arms - BIGGER */}
           <div
-            className="absolute top-3 -left-2 w-6 h-1 bg-blue-500 border border-black rounded-full"
+            className="absolute top-5 -left-3 w-8 h-2 bg-blue-400 border-2 border-black rounded-full"
             style={{
               filter: 'url(#sketch-outline)',
-              transform: state === 'running' ? 'rotate(-20deg)' : state === 'celebrating' ? 'rotate(-45deg)' : 'rotate(0deg)',
+              transform: state === 'running' ? 'rotate(-20deg)' : state === 'celebrating' ? 'rotate(-50deg)' : 'rotate(-10deg)',
               transition: 'transform 0.3s'
             }}
           />
           <div
-            className="absolute top-3 -right-2 w-6 h-1 bg-blue-500 border border-black rounded-full"
+            className="absolute top-5 -right-3 w-8 h-2 bg-blue-400 border-2 border-black rounded-full"
             style={{
               filter: 'url(#sketch-outline)',
-              transform: state === 'running' ? 'rotate(20deg)' : state === 'celebrating' ? 'rotate(45deg)' : 'rotate(0deg)',
+              transform: state === 'running' ? 'rotate(20deg)' : state === 'celebrating' ? 'rotate(50deg)' : 'rotate(10deg)',
               transition: 'transform 0.3s'
             }}
           />
         </div>
 
-        {/* Legs - wobble when running */}
-        <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 flex gap-1">
+        {/* Legs - BIGGER */}
+        <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 flex gap-2">
           <div
-            className="w-1 h-4 bg-blue-700 border border-black rounded-full"
+            className="w-2 h-6 bg-blue-600 border-2 border-black rounded-full"
             style={{
               filter: 'url(#sketch-outline)',
-              transform: state === 'running' ? 'rotate(-10deg)' : 'rotate(0deg)',
-              transition: 'transform 0.15s'
+              transform: state === 'running' ? 'rotate(-15deg)' : 'rotate(0deg)',
+              transition: 'transform 0.15s',
+              boxShadow: 'inset -1px -1px 2px rgba(0,0,0,0.3)'
             }}
           />
           <div
-            className="w-1 h-4 bg-blue-700 border border-black rounded-full"
+            className="w-2 h-6 bg-blue-600 border-2 border-black rounded-full"
             style={{
               filter: 'url(#sketch-outline)',
-              transform: state === 'running' ? 'rotate(10deg)' : 'rotate(0deg)',
-              transition: 'transform 0.15s'
+              transform: state === 'running' ? 'rotate(15deg)' : 'rotate(0deg)',
+              transition: 'transform 0.15s',
+              boxShadow: 'inset -1px -1px 2px rgba(0,0,0,0.3)'
             }}
           />
         </div>
 
-        {/* Celebration sparkles */}
+        {/* Celebration sparkles - BIGGER */}
         {state === 'celebrating' && (
           <>
-            <div className="absolute -top-4 -left-4 text-yellow-400 animate-ping text-xl">✨</div>
-            <div className="absolute -top-4 -right-4 text-yellow-400 animate-ping text-xl" style={{ animationDelay: '0.2s' }}>✨</div>
-            <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 text-yellow-400 animate-ping text-xl" style={{ animationDelay: '0.4s' }}>⭐</div>
+            <div className="absolute -top-6 -left-6 text-yellow-400 animate-ping text-3xl drop-shadow-lg">✨</div>
+            <div className="absolute -top-6 -right-6 text-yellow-400 animate-ping text-3xl drop-shadow-lg" style={{ animationDelay: '0.2s' }}>✨</div>
+            <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 text-yellow-400 animate-ping text-3xl drop-shadow-lg" style={{ animationDelay: '0.4s' }}>⭐</div>
           </>
         )}
 
-        {/* Shadow */}
+        {/* Shadow - BIGGER */}
         <div
-          className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-8 h-2 bg-black/30 rounded-full"
-          style={{ filter: 'blur(2px)' }}
+          className="absolute -bottom-5 left-1/2 -translate-x-1/2 w-12 h-3 bg-black/40 rounded-full"
+          style={{ filter: 'blur(3px)' }}
         />
       </div>
     </div>
