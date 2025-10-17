@@ -198,38 +198,9 @@ export const CityMap2D = ({ onBossClick, onLevelClick }: CityMap2DProps) => {
                   isBoss={isBoss}
                   onClick={() => handleBuildingClick(level)}
                 />
-
-                {/* Trees around each building */}
-                <SketchyTree2D
-                  position={{ x: position.x + 50, y: position.y + 30 }}
-                  scale={0.8}
-                  type="oak"
-                />
-                <SketchyTree2D
-                  position={{ x: position.x - 45, y: position.y + 35 }}
-                  scale={0.7}
-                  type="pine"
-                />
-                {level % 3 === 0 && (
-                  <SketchyTree2D
-                    position={{ x: position.x + 30, y: position.y - 40 }}
-                    scale={0.9}
-                    type="palm"
-                  />
-                )}
               </div>
             );
           })}
-
-          {/* Additional decorative trees - More scattered */}
-          <SketchyTree2D position={{ x: 100, y: 300 }} scale={1.3} type="oak" />
-          <SketchyTree2D position={{ x: 850, y: 280 }} scale={1.2} type="pine" />
-          <SketchyTree2D position={{ x: 150, y: 450 }} scale={1.0} type="palm" />
-          <SketchyTree2D position={{ x: 950, y: 420 }} scale={1.1} type="oak" />
-          <SketchyTree2D position={{ x: 500, y: 250 }} scale={0.9} type="pine" />
-          <SketchyTree2D position={{ x: 1100, y: 350 }} scale={1.2} type="palm" />
-          <SketchyTree2D position={{ x: 250, y: 550 }} scale={1.0} type="oak" />
-          <SketchyTree2D position={{ x: 750, y: 580 }} scale={1.1} type="pine" />
 
           {/* Character */}
           <SketchyCharacter2D

@@ -15,11 +15,12 @@ export const PlayerStatus = ({ points, level, className }: PlayerStatusProps) =>
   return (
     <div
       className={cn(
-        'fixed top-4 left-4 z-[100] w-64 animate-fade-in',
+        'fixed top-5 left-5 z-[1000] w-64 animate-fade-in',
         'bg-gradient-to-br from-card via-card to-secondary/20',
         'backdrop-blur-md border-2 border-primary rounded-xl p-3 shadow-2xl',
         className
       )}
+      style={{ position: 'absolute' }}
     >
       {/* Content */}
       <div className="relative space-y-2">

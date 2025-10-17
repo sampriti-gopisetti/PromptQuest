@@ -43,10 +43,10 @@ export const SketchyBuilding2D = ({
   const type = getBuildingType();
   const color = getColor();
   
-  // Progressive sizing based on level
-  const sizeMultiplier = 1 + (level - 1) * 0.15; // Grows 15% per level
-  const baseSize = (type === 'skyscraper' ? 70 : type === 'office' ? 60 : type === 'apartment' ? 55 : type === 'shop' ? 50 : 45) * sizeMultiplier;
-  const height = (type === 'skyscraper' ? 90 : type === 'office' ? 70 : type === 'apartment' ? 60 : type === 'shop' ? 50 : 45) * sizeMultiplier;
+  // Progressive sizing based on level - MUCH SMALLER with subtle scaling
+  const sizeMultiplier = 1 + (level - 1) * 0.01; // Only 1% increase per level
+  const baseWidth = (type === 'skyscraper' ? 45 : type === 'office' ? 40 : type === 'apartment' ? 38 : type === 'shop' ? 35 : 32) * sizeMultiplier;
+  const baseHeight = (type === 'skyscraper' ? 55 : type === 'office' ? 48 : type === 'apartment' ? 45 : type === 'shop' ? 40 : 38) * sizeMultiplier;
 
   return (
     <div
@@ -60,7 +60,7 @@ export const SketchyBuilding2D = ({
       onClick={!isLocked ? onClick : undefined}
     >
       {/* Building container */}
-      <div className="relative" style={{ width: `${baseSize + 20}px`, height: `${height + 40}px` }}>
+      <div className="relative" style={{ width: `${baseWidth + 20}px`, height: `${baseHeight + 40}px` }}>
         {/* Shadow */}
         <div
           className="absolute opacity-40"
@@ -68,7 +68,7 @@ export const SketchyBuilding2D = ({
             bottom: '-5px',
             left: '50%',
             transform: 'translateX(-50%)',
-            width: `${baseSize + 20}px`,
+            width: `${baseWidth + 20}px`,
             height: '10px',
             background: 'radial-gradient(ellipse, rgba(0,0,0,0.5) 0%, transparent 70%)',
             filter: 'blur(4px)'
@@ -81,8 +81,8 @@ export const SketchyBuilding2D = ({
           <div
             className="relative border-4 border-black rounded-lg"
             style={{
-              width: `${baseSize}px`,
-              height: `${height}px`,
+              width: `${baseWidth}px`,
+              height: `${baseHeight}px`,
               background: `linear-gradient(135deg, ${color} 0%, ${color}dd 50%, ${color}aa 100%)`,
               filter: 'url(#sketch-outline)',
               boxShadow: `
