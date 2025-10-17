@@ -98,23 +98,6 @@ export const SketchyBuilding2D = ({
               style={{ filter: 'url(#sketch-outline)' }}
             />
 
-            {/* Windows */}
-            {type !== 'house' && (
-              <div className="p-3 grid grid-cols-3 gap-2">
-                {Array.from({ length: type === 'skyscraper' ? 18 : type === 'office' ? 12 : 9 }).map((_, i) => (
-                  <div
-                    key={i}
-                    className="bg-cyan-200/80 border-2 border-black rounded-sm"
-                    style={{
-                      width: '8px',
-                      height: '10px',
-                      filter: 'url(#sketch-outline)',
-                      boxShadow: 'inset 1px 1px 2px rgba(255,255,255,0.5)'
-                    }}
-                  />
-                ))}
-              </div>
-            )}
 
             {/* Door for houses */}
             {type === 'house' && (
@@ -159,13 +142,13 @@ export const SketchyBuilding2D = ({
           )}
         </div>
 
-        {/* Status icons - BOTTOM LAYER */}
+        {/* Tiny lock above level - BOTTOM LAYER */}
         {isLocked && (
           <div 
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white/95 rounded-full p-4 border-4 border-black shadow-xl" 
+            className="absolute -top-24 left-1/2 -translate-x-1/2" 
             style={{ filter: 'url(#sketch-outline)', zIndex: 10 }}
           >
-            <Lock size={36} className="text-gray-700" strokeWidth={3} />
+            <Lock size={14} className="text-gray-700" strokeWidth={2.5} />
           </div>
         )}
         {isCompleted && (

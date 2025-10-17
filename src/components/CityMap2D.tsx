@@ -19,18 +19,18 @@ export const CityMap2D = ({ onBossClick, onLevelClick }: CityMap2DProps) => {
   const [characterDirection, setCharacterDirection] = useState<'left' | 'right'>('right');
   const [particles, setParticles] = useState<Array<{ id: number; pos: { x: number; y: number }; type: 'confetti' | 'dust' | 'sparkle' | 'star' }>>([]);
 
-  // Horizontal snake path positions
+  // Horizontal snake path positions - centered
   const getSnakePosition = (level: number): { x: number; y: number } => {
-    const colWidth = 180; // Wider spacing for horizontal layout
-    const rowHeight = 160; // More vertical spacing
+    const colWidth = 200; // Wider spacing for horizontal layout
+    const rowHeight = 220; // More vertical spacing
     const row = Math.floor((level - 1) / 5); // 5 buildings per row
     const col = (level - 1) % 5;
     
     // Alternate direction per row (snake pattern) - horizontal
     const x = row % 2 === 0 
-      ? 200 + col * colWidth 
-      : 200 + (4 - col) * colWidth;
-    const y = 200 + row * rowHeight; // Start from top
+      ? 100 + col * colWidth 
+      : 100 + (4 - col) * colWidth;
+    const y = 80 + row * rowHeight; // Start from top
     
     return { x, y };
   };
@@ -150,26 +150,9 @@ export const CityMap2D = ({ onBossClick, onLevelClick }: CityMap2DProps) => {
         ☀️
       </div>
 
-      {/* Main game area - Scrollable container */}
-      <div className="relative w-full h-full overflow-y-auto">
-        <div className="relative w-full" style={{ minHeight: '900px', paddingTop: '150px', paddingBottom: '100px' }}>
-          {/* Decorative flowers scattered in grass */}
-          {[...Array(15)].map((_, i) => (
-            <div
-              key={`flower-${i}`}
-              className="absolute text-3xl"
-              style={{
-                left: `${5 + i * 6}%`,
-                top: `${60 + (i % 5) * 8}%`,
-                filter: 'url(#sketch-wobble)',
-                animation: `float ${6 + (i % 3) * 2}s infinite ease-in-out`,
-                animationDelay: `${i * 0.3}s`,
-                zIndex: 3
-              }}
-            >
-              {['🌸', '🌺', '🌻', '🌼', '🌷'][i % 5]}
-            </div>
-          ))}
+      {/* Main game area - No scrolling, centered */}
+      <div className="relative w-full h-full overflow-hidden flex items-center justify-center">
+        <div className="relative" style={{ width: '1100px', height: '500px' }}>
 
           {/* Roads connecting buildings in snake pattern */}
           {Array.from({ length: 9 }, (_, i) => {
