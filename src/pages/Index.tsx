@@ -7,6 +7,7 @@ import { BossWarningDialog } from '@/components/BossWarningDialog';
 import { CelebrationFireworks } from '@/components/CelebrationFireworks';
 import { QuestionModal } from '@/components/QuestionModal';
 import { FeedbackModal } from '@/components/FeedbackModal';
+import { GameCompleteScreen } from '@/components/GameCompleteScreen';
 import { useGameState } from '@/hooks/useGameState';
 import { toast } from '@/hooks/use-toast';
 
@@ -16,11 +17,12 @@ const Index = () => {
   const [showCelebration, setShowCelebration] = useState(false);
   const [showQuestionModal, setShowQuestionModal] = useState(false);
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+  const [showGameComplete, setShowGameComplete] = useState(false);
   const [currentQuestionLevel, setCurrentQuestionLevel] = useState<number | null>(null);
   const [currentQuestion, setCurrentQuestion] = useState('');
   const [submittedAnswer, setSubmittedAnswer] = useState('');
   const [earnedScore, setEarnedScore] = useState(0);
-  const { points, currentLevel, completedLevels, completeLevel, unlockNextLevel } = useGameState();
+  const { points, currentLevel, completedLevels, completeLevel, unlockNextLevel, resetGame } = useGameState();
 
   const handleBossClick = () => {
     setShowBossWarning(true);
@@ -76,21 +78,43 @@ const Index = () => {
     setTimeout(() => {
       // Now update game state - this triggers character movement
       completeLevel(currentQuestionLevel, earnedScore);
-      unlockNextLevel();
       
-    // After character movement animation (~3 seconds), show celebration
-    setTimeout(() => {
-      setShowCelebration(true);
-      
-      toast({
-        title: '✅ Level Complete!',
-        description: `+${earnedScore} points earned`,
-      });
-      
-      // Reset current question level
-      setCurrentQuestionLevel(null);
-    }, 3000);
+      // Check if this was the final level (level 10)
+      if (currentQuestionLevel === 10) {
+        // Don't unlock next level (there is none!)
+        // After character movement animation, show game complete screen
+        setTimeout(() => {
+          setShowGameComplete(true);
+        }, 3000);
+      } else {
+        // Regular level - unlock next and show celebration
+        unlockNextLevel();
+        
+        // After character movement animation (~3 seconds), show celebration
+        setTimeout(() => {
+          setShowCelebration(true);
+          
+          toast({
+            title: '✅ Level Complete!',
+            description: `+${earnedScore} points earned`,
+          });
+          
+          // Reset current question level
+          setCurrentQuestionLevel(null);
+        }, 3000);
+      }
     }, 300);
+  };
+
+  const handlePlayAgain = () => {
+    setShowGameComplete(false);
+    resetGame();
+    setCurrentQuestionLevel(null);
+  };
+
+  const handleViewLeaderboard = () => {
+    setShowGameComplete(false);
+    setShowLeaderboard(true);
   };
 
   return (
@@ -139,6 +163,15 @@ const Index = () => {
       {showCelebration && (
         <CelebrationFireworks onComplete={() => setShowCelebration(false)} />
       )}
+
+      {/* Game Complete Screen */}
+      <GameCompleteScreen
+        open={showGameComplete}
+        onClose={() => setShowGameComplete(false)}
+        totalPoints={points}
+        onPlayAgain={handlePlayAgain}
+        onViewLeaderboard={handleViewLeaderboard}
+      />
     </main>
   );
 };
