@@ -8,9 +8,10 @@ from dotenv import load_dotenv
 
 try:
     # Teammate-provided module; we handle absence gracefully for local dev.
-    from levels import get_level_details  # type: ignore
+    from levels import get_level_details, get_all_levels  # type: ignore
 except Exception as e:  # pragma: no cover - fallback for missing teammate file
     get_level_details = None  # type: ignore
+    get_all_levels = None  # type: ignore
 
     def _missing_levels_warning(*args: Any, **kwargs: Any) -> None:
         pass
@@ -38,8 +39,8 @@ if API_KEY:
 DEFAULT_MODEL_CANDIDATES = [
     # Preferred order; we'll auto-fallback to the next available
     os.getenv("GEMINI_MODEL", "gemini-1.5-pro-latest"),
-    # "gemini-1.5-pro",
-    # "gemini-1.5-pro-002",
+    "gemini-1.5-pro",
+    "gemini-1.5-pro-002",
     "gemini-1.5-flash",
     "gemini-1.5-flash-002",
 ]
@@ -221,6 +222,17 @@ def get_level(level_id: str) -> Tuple[Any, int]:
         return jsonify(details), 200
     except Exception as e:
         return jsonify({"error": "failed to retrieve level", "details": str(e)}), 500
+
+
+@app.get("/api/levels")
+def list_levels() -> Tuple[Any, int]:
+    try:
+        if get_all_levels is None:
+            return jsonify({"error": "levels module not available"}), 501
+        items = get_all_levels()
+        return jsonify(items), 200
+    except Exception as e:
+        return jsonify({"error": "failed to list levels", "details": str(e)}), 500
 
 
 @app.get("/api/models")
