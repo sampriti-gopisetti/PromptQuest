@@ -1,5 +1,5 @@
+import { User } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Sparkles } from 'lucide-react';
 
 interface PlayerStatusProps {
   points: number;
@@ -8,56 +8,60 @@ interface PlayerStatusProps {
 }
 
 export const PlayerStatus = ({ points, level, className }: PlayerStatusProps) => {
+  // Calculate progress to next level (example: 1000 points per level)
+  const pointsPerLevel = 1000;
+  const progress = (points % pointsPerLevel) / pointsPerLevel;
+
   return (
     <div
       className={cn(
-        'fixed top-8 left-8 z-50',
-        'p-6 rounded-2xl border-2 border-primary/50',
-        'bg-card/80 backdrop-blur-xl shadow-glow',
-        'transition-all duration-500',
+        'fixed top-4 left-4 z-50 w-72 animate-fade-in',
+        'bg-gradient-to-br from-card via-card to-secondary/20',
+        'backdrop-blur-md border-2 border-primary rounded-xl p-4 shadow-2xl',
         className
       )}
     >
-      <div className="flex flex-col gap-4">
-        {/* Operator Glyph */}
-        <div className="relative w-20 h-20 mx-auto">
-          <div className="absolute inset-0 rounded-full bg-gradient-node animate-pulse-glow" />
-          <div className="absolute inset-0 flex items-center justify-center">
-            <Sparkles className="w-10 h-10 text-primary animate-pulse" />
+      {/* Content */}
+      <div className="relative space-y-3">
+        {/* Header */}
+        <div className="flex items-center gap-3">
+          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center ring-2 ring-primary/30">
+            <User className="w-7 h-7 text-white" />
           </div>
-          {/* Orbiting indicator */}
-          <div className="absolute inset-0">
-            <div className="w-2 h-2 rounded-full bg-primary absolute top-0 left-1/2 transform -translate-x-1/2 animate-orbit" />
+          <div>
+            <h2 className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+              PROMPT QUEST
+            </h2>
+            <p className="text-xs text-muted-foreground">Your Adventure</p>
           </div>
         </div>
 
         {/* Stats */}
-        <div className="space-y-2">
-          <div className="flex items-center justify-between gap-4">
-            <span className="text-sm text-muted-foreground uppercase tracking-wider">Level</span>
-            <span className="text-2xl font-bold text-primary glow-text font-mono">{level}</span>
+        <div className="grid grid-cols-2 gap-3">
+          <div className="bg-primary/10 rounded-lg p-3 border border-primary/20">
+            <p className="text-xs text-muted-foreground mb-1">Level</p>
+            <p className="text-3xl font-bold text-primary">{level}</p>
           </div>
-
-          <div className="flex items-center justify-between gap-4">
-            <span className="text-sm text-muted-foreground uppercase tracking-wider">Points</span>
-            <span className="text-xl font-bold text-foreground font-mono">{points}</span>
+          <div className="bg-secondary/10 rounded-lg p-3 border border-secondary/20">
+            <p className="text-xs text-muted-foreground mb-1">Points</p>
+            <p className="text-2xl font-bold text-secondary">{points.toLocaleString()}</p>
           </div>
         </div>
 
-        {/* Progress indicator */}
-        <div className="relative h-2 bg-muted rounded-full overflow-hidden">
-          <div
-            className="absolute inset-y-0 left-0 bg-gradient-to-r from-primary to-accent animate-flow rounded-full"
-            style={{ width: `${Math.min((points % 1000) / 10, 100)}%` }}
-          />
+        {/* Progress Bar */}
+        <div className="space-y-1">
+          <div className="flex justify-between text-xs text-muted-foreground">
+            <span>Next Level</span>
+            <span>{Math.round(progress * 100)}%</span>
+          </div>
+          <div className="h-3 bg-muted rounded-full overflow-hidden border border-border">
+            <div
+              className="h-full bg-gradient-to-r from-primary via-accent to-secondary transition-all duration-500"
+              style={{ width: `${progress * 100}%` }}
+            />
+          </div>
         </div>
       </div>
-
-      {/* Corner decorations */}
-      <div className="absolute -top-1 -left-1 w-4 h-4 border-t-2 border-l-2 border-primary rounded-tl-lg" />
-      <div className="absolute -top-1 -right-1 w-4 h-4 border-t-2 border-r-2 border-primary rounded-tr-lg" />
-      <div className="absolute -bottom-1 -left-1 w-4 h-4 border-b-2 border-l-2 border-primary rounded-bl-lg" />
-      <div className="absolute -bottom-1 -right-1 w-4 h-4 border-b-2 border-r-2 border-primary rounded-br-lg" />
     </div>
   );
 };
