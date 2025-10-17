@@ -24,12 +24,12 @@ export const SketchyCharacter2D = ({
 
   return (
     <div
-      className="absolute transition-all duration-300"
+      className="absolute transition-all duration-2000"
       style={{
         left: `${position.x}px`,
         top: `${position.y}px`,
         transform: `translate(-50%, -50%) ${direction === 'left' ? 'scaleX(-1)' : ''}`,
-        zIndex: 9999
+        zIndex: Math.floor(position.y / 2) + 100
       }}
     >
       {/* Character body - simple blob with sketchy outline */}
@@ -54,12 +54,12 @@ export const SketchyCharacter2D = ({
 
         {/* Main character body */}
         <div
-          className="relative bg-blue-500 border-3 border-black rounded-full"
+          className="relative bg-gradient-to-br from-blue-400 to-blue-600 border-3 border-black rounded-full shadow-lg"
           style={{
-            width: '32px',
-            height: '40px',
+            width: '40px',
+            height: '48px',
             filter: 'url(#sketch-outline)',
-            transform: `rotate(${wobble}deg) scale(${state === 'entering' ? 0.5 : state === 'celebrating' ? 1.2 : 1})`,
+            transform: `rotate(${wobble}deg) scale(${state === 'entering' ? 0.5 : state === 'celebrating' ? 1.3 : 1})`,
             transition: 'transform 0.3s ease-out'
           }}
         >

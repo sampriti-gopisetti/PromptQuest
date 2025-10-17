@@ -19,7 +19,7 @@ interface BossWarningDialogProps {
 export const BossWarningDialog = ({ open, onAccept, onCancel }: BossWarningDialogProps) => {
   return (
     <AlertDialog open={open} onOpenChange={(isOpen) => !isOpen && onCancel()}>
-      <AlertDialogContent className="max-w-md border-2 border-warning bg-gradient-to-br from-background to-warning/10">
+      <AlertDialogContent className="max-w-md border-2 border-warning bg-gradient-to-br from-background to-warning/10 z-[9999]" style={{ position: 'fixed', zIndex: 9999 }}>
         <AlertDialogHeader>
           <div className="flex items-center justify-center mb-4">
             <div className="p-3 rounded-full bg-warning/20 animate-pulse">

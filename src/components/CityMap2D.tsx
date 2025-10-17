@@ -19,27 +19,27 @@ export const CityMap2D = ({ onBossClick, onLevelClick }: CityMap2DProps) => {
   const [characterDirection, setCharacterDirection] = useState<'left' | 'right'>('right');
   const [particles, setParticles] = useState<Array<{ id: number; pos: { x: number; y: number }; type: 'confetti' | 'dust' | 'sparkle' | 'star' }>>([]);
 
-  // Isometric snake path positions
+  // Horizontal snake path positions
   const getSnakePosition = (level: number): { x: number; y: number } => {
-    const rowHeight = 140;
-    const colWidth = 120;
-    const row = Math.floor((level - 1) / 3);
-    const col = (level - 1) % 3;
+    const colWidth = 180; // Wider spacing for horizontal layout
+    const rowHeight = 160; // More vertical spacing
+    const row = Math.floor((level - 1) / 5); // 5 buildings per row
+    const col = (level - 1) % 5;
     
-    // Alternate direction per row (snake pattern)
+    // Alternate direction per row (snake pattern) - horizontal
     const x = row % 2 === 0 
-      ? 250 + col * colWidth 
-      : 250 + (2 - col) * colWidth;
-    const y = 550 - row * rowHeight;
+      ? 200 + col * colWidth 
+      : 200 + (4 - col) * colWidth;
+    const y = 200 + row * rowHeight; // Start from top
     
     return { x, y };
   };
 
   // Initialize character position
   useEffect(() => {
-    const initialPos = getSnakePosition(currentLevel);
+    const initialPos = getSnakePosition(Math.max(1, currentLevel));
     setCharacterPos(initialPos);
-  }, []);
+  }, [currentLevel]);
 
   const handleBuildingClick = (level: number) => {
     if (level === 10 && completedLevels.includes(9)) {
@@ -99,7 +99,7 @@ export const CityMap2D = ({ onBossClick, onLevelClick }: CityMap2DProps) => {
   };
 
   return (
-    <div className="relative w-full h-screen overflow-hidden" style={{ background: 'linear-gradient(to bottom, #87CEEB 0%, #E0F2FE 50%, #B4E7CE 100%)' }}>
+    <div className="relative w-full h-screen overflow-auto" style={{ background: 'linear-gradient(to bottom, #87CEEB 0%, #E0F2FE 50%, #B4E7CE 100%)' }}>
       <SketchFilter />
 
       {/* Decorative clouds */}
@@ -146,13 +146,13 @@ export const CityMap2D = ({ onBossClick, onLevelClick }: CityMap2DProps) => {
       </div>
 
       {/* Main game area */}
-      <div className="relative w-full h-full">
+      <div className="relative w-full" style={{ minHeight: '800px', paddingBottom: '100px' }}>
         {/* Ground with grass texture */}
         <div
-          className="absolute inset-0 top-1/4"
+          className="absolute inset-0"
           style={{
             background: 'linear-gradient(to bottom, #48BB78 0%, #38A169 50%, #2F855A 100%)',
-            clipPath: 'polygon(0 0, 100% 5%, 100% 100%, 0 95%)'
+            minHeight: '100%'
           }}
         >
           {/* Grass stipple effect */}

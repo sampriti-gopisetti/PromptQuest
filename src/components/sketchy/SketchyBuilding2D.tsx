@@ -47,12 +47,12 @@ export const SketchyBuilding2D = ({
 
   return (
     <div
-      className="absolute cursor-pointer transition-transform hover:scale-110"
+      className="absolute cursor-pointer transition-transform hover:scale-105"
       style={{
         left: `${position.x}px`,
         top: `${position.y}px`,
         transform: 'translate(-50%, -50%)',
-        zIndex: Math.floor(position.y)
+        zIndex: Math.floor(position.y / 2)
       }}
       onClick={!isLocked ? onClick : undefined}
     >
@@ -73,11 +73,11 @@ export const SketchyBuilding2D = ({
           }}
         />
 
-        {/* Isometric building body */}
+          {/* Isometric building body */}
         <div className="absolute bottom-0 left-1/2 -translate-x-1/2" style={{ transformStyle: 'preserve-3d' }}>
           {/* Front face */}
           <div
-            className="relative border-2 border-black"
+            className="relative border-3 border-black"
             style={{
               width: `${baseSize}px`,
               height: `${height}px`,
@@ -85,8 +85,8 @@ export const SketchyBuilding2D = ({
               transform: 'rotateX(60deg) rotateZ(-45deg)',
               transformOrigin: 'bottom',
               filter: 'url(#sketch-outline)',
-              boxShadow: '2px 2px 0 rgba(0,0,0,0.3)',
-              borderRadius: '2px'
+              boxShadow: '3px 3px 0 rgba(0,0,0,0.4)',
+              borderRadius: '3px'
             }}
           >
             {/* Cross-hatch shading on left side */}
@@ -174,10 +174,10 @@ export const SketchyBuilding2D = ({
 
         {/* Level indicator */}
         <div
-          className="absolute -top-6 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full border-2 border-black bg-white flex items-center justify-center font-bold text-sm"
-          style={{ filter: 'url(#sketch-outline)' }}
+          className="absolute -top-6 left-1/2 -translate-x-1/2 w-10 h-10 rounded-full border-3 border-black bg-gradient-to-br from-yellow-300 to-orange-400 flex items-center justify-center font-bold text-lg shadow-lg"
+          style={{ filter: 'url(#sketch-outline)', zIndex: 10 }}
         >
-          {level}
+          <span className="text-black drop-shadow-sm">{level}</span>
         </div>
 
         {/* Status icons */}
