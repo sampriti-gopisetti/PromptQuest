@@ -35,7 +35,7 @@ export const GameCompleteScreen = ({
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 animate-fade-in">
+    <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/80 animate-fade-in">
       {/* Floating Particles */}
       {particles.map((particle) => (
         <div
