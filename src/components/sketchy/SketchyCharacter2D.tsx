@@ -38,13 +38,13 @@ export const SketchyCharacter2D = ({
         {state === 'running' && (
           <>
             <div
-              className="absolute -left-10 top-6 text-gray-400 text-3xl animate-ping"
+              className="absolute -left-8 top-4 text-gray-400 text-2xl animate-ping"
               style={{ filter: 'url(#sketch-outline)', animationDuration: '0.5s' }}
             >
               💨
             </div>
             <div
-              className="absolute -left-16 top-8 text-gray-400 text-2xl animate-ping"
+              className="absolute -left-12 top-6 text-gray-400 text-xl animate-ping"
               style={{ filter: 'url(#sketch-outline)', animationDuration: '0.7s', animationDelay: '0.1s' }}
             >
               💨
@@ -52,44 +52,44 @@ export const SketchyCharacter2D = ({
           </>
         )}
 
-        {/* Main character body - BIGGER */}
+        {/* Main character body - Smaller */}
         <div
-          className="relative border-4 border-black rounded-full shadow-2xl"
+          className="relative border-3 border-black rounded-full shadow-2xl"
           style={{
-            width: '56px',
-            height: '64px',
+            width: '36px',
+            height: '42px',
             background: 'linear-gradient(135deg, #60A5FA 0%, #3B82F6 50%, #2563EB 100%)',
             filter: 'url(#sketch-outline)',
             transform: `rotate(${wobble}deg) scale(${state === 'entering' ? 0.5 : state === 'celebrating' ? 1.4 : 1})`,
             transition: 'transform 0.3s ease-out',
-            boxShadow: '0 8px 16px rgba(0,0,0,0.3), inset -3px -3px 6px rgba(0,0,0,0.2), inset 3px 3px 6px rgba(255,255,255,0.3)'
+            boxShadow: '0 6px 12px rgba(0,0,0,0.3), inset -2px -2px 4px rgba(0,0,0,0.2), inset 2px 2px 4px rgba(255,255,255,0.3)'
           }}
         >
-          {/* Eyes - BIGGER */}
-          <div className="absolute top-3 left-1/2 -translate-x-1/2 flex gap-2">
+          {/* Eyes - Smaller */}
+          <div className="absolute top-2 left-1/2 -translate-x-1/2 flex gap-1">
             <div
-              className="w-3 h-3 bg-white rounded-full border-2 border-black"
+              className="w-2 h-2 bg-white rounded-full border-2 border-black"
               style={{ 
                 filter: 'url(#sketch-outline)',
                 transform: state === 'celebrating' ? 'scaleY(0.3)' : 'scaleY(1)'
               }}
             >
-              <div className="w-1.5 h-1.5 bg-black rounded-full absolute bottom-0 left-1/2 -translate-x-1/2" />
+              <div className="w-1 h-1 bg-black rounded-full absolute bottom-0 left-1/2 -translate-x-1/2" />
             </div>
             <div
-              className="w-3 h-3 bg-white rounded-full border-2 border-black"
+              className="w-2 h-2 bg-white rounded-full border-2 border-black"
               style={{ 
                 filter: 'url(#sketch-outline)',
                 transform: state === 'celebrating' ? 'scaleY(0.3)' : 'scaleY(1)'
               }}
             >
-              <div className="w-1.5 h-1.5 bg-black rounded-full absolute bottom-0 left-1/2 -translate-x-1/2" />
+              <div className="w-1 h-1 bg-black rounded-full absolute bottom-0 left-1/2 -translate-x-1/2" />
             </div>
           </div>
 
-          {/* Mouth - BIGGER */}
+          {/* Mouth - Smaller */}
           <div
-            className="absolute top-8 left-1/2 -translate-x-1/2 w-4 h-2 border-b-3 border-black rounded-b-full"
+            className="absolute top-5 left-1/2 -translate-x-1/2 w-3 h-1.5 border-b-2 border-black rounded-b-full"
             style={{
               filter: 'url(#sketch-outline)',
               transform: state === 'celebrating' ? 'scaleX(1.8)' : 'scaleX(1)',
@@ -97,9 +97,9 @@ export const SketchyCharacter2D = ({
             }}
           />
 
-          {/* Arms - BIGGER */}
+          {/* Arms - Smaller */}
           <div
-            className="absolute top-5 -left-3 w-8 h-2 bg-blue-400 border-2 border-black rounded-full"
+            className="absolute top-3 -left-2 w-5 h-1.5 bg-blue-400 border-2 border-black rounded-full"
             style={{
               filter: 'url(#sketch-outline)',
               transform: state === 'running' ? 'rotate(-20deg)' : state === 'celebrating' ? 'rotate(-50deg)' : 'rotate(-10deg)',
@@ -107,7 +107,7 @@ export const SketchyCharacter2D = ({
             }}
           />
           <div
-            className="absolute top-5 -right-3 w-8 h-2 bg-blue-400 border-2 border-black rounded-full"
+            className="absolute top-3 -right-2 w-5 h-1.5 bg-blue-400 border-2 border-black rounded-full"
             style={{
               filter: 'url(#sketch-outline)',
               transform: state === 'running' ? 'rotate(20deg)' : state === 'celebrating' ? 'rotate(50deg)' : 'rotate(10deg)',
@@ -116,10 +116,10 @@ export const SketchyCharacter2D = ({
           />
         </div>
 
-        {/* Legs - BIGGER */}
-        <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 flex gap-2">
+        {/* Legs - Smaller */}
+        <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5">
           <div
-            className="w-2 h-6 bg-blue-600 border-2 border-black rounded-full"
+            className="w-1.5 h-4 bg-blue-600 border-2 border-black rounded-full"
             style={{
               filter: 'url(#sketch-outline)',
               transform: state === 'running' ? 'rotate(-15deg)' : 'rotate(0deg)',
@@ -128,7 +128,7 @@ export const SketchyCharacter2D = ({
             }}
           />
           <div
-            className="w-2 h-6 bg-blue-600 border-2 border-black rounded-full"
+            className="w-1.5 h-4 bg-blue-600 border-2 border-black rounded-full"
             style={{
               filter: 'url(#sketch-outline)',
               transform: state === 'running' ? 'rotate(15deg)' : 'rotate(0deg)',
@@ -138,19 +138,19 @@ export const SketchyCharacter2D = ({
           />
         </div>
 
-        {/* Celebration sparkles - BIGGER */}
+        {/* Celebration sparkles - Smaller */}
         {state === 'celebrating' && (
           <>
-            <div className="absolute -top-6 -left-6 text-yellow-400 animate-ping text-3xl drop-shadow-lg">✨</div>
-            <div className="absolute -top-6 -right-6 text-yellow-400 animate-ping text-3xl drop-shadow-lg" style={{ animationDelay: '0.2s' }}>✨</div>
-            <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 text-yellow-400 animate-ping text-3xl drop-shadow-lg" style={{ animationDelay: '0.4s' }}>⭐</div>
+            <div className="absolute -top-5 -left-5 text-yellow-400 animate-ping text-2xl drop-shadow-lg">✨</div>
+            <div className="absolute -top-5 -right-5 text-yellow-400 animate-ping text-2xl drop-shadow-lg" style={{ animationDelay: '0.2s' }}>✨</div>
+            <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 text-yellow-400 animate-ping text-2xl drop-shadow-lg" style={{ animationDelay: '0.4s' }}>⭐</div>
           </>
         )}
 
-        {/* Shadow - BIGGER */}
+        {/* Shadow - Smaller */}
         <div
-          className="absolute -bottom-5 left-1/2 -translate-x-1/2 w-12 h-3 bg-black/40 rounded-full"
-          style={{ filter: 'blur(3px)' }}
+          className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-8 h-2 bg-black/40 rounded-full"
+          style={{ filter: 'blur(2px)' }}
         />
       </div>
     </div>

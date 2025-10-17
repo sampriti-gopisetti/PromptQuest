@@ -4,6 +4,7 @@ import { SketchyTree2D } from './sketchy/SketchyTree2D';
 import { SketchyRoad2D } from './sketchy/SketchyRoad2D';
 import { SketchyCharacter2D } from './sketchy/SketchyCharacter2D';
 import { SketchyParticle } from './sketchy/SketchyParticle';
+import { SketchyFlower2D } from './sketchy/SketchyFlower2D';
 import { useGameState } from '@/hooks/useGameState';
 import { useState, useEffect } from 'react';
 
@@ -156,22 +157,22 @@ export const CityMap2D = ({ onBossClick, onLevelClick }: CityMap2DProps) => {
         ☀️
       </div>
 
-      {/* Flowers in grass area */}
-      {[...Array(18)].map((_, i) => (
-        <div
-          key={`flower-${i}`}
-          className="absolute text-4xl"
-          style={{
-            left: `${5 + i * 5}%`,
-            bottom: `${5 + (i % 4) * 5}%`,
-            filter: 'url(#sketch-wobble)',
-            zIndex: 5,
-            transform: `rotate(${(i % 3) * 15 - 15}deg)`
-          }}
-        >
-          {i % 3 === 0 ? '🌸' : i % 3 === 1 ? '🌼' : '🌺'}
-        </div>
-      ))}
+      {/* Sketchy flowers in grass area */}
+      {[...Array(18)].map((_, i) => {
+        const flowerType = i % 3 === 0 ? 'pink' : i % 3 === 1 ? 'yellow' : 'red';
+        const rotation = (i % 3) * 15 - 15;
+        return (
+          <SketchyFlower2D
+            key={`flower-${i}`}
+            position={{
+              x: `${5 + i * 5}%`,
+              y: `${5 + (i % 4) * 5}%`
+            }}
+            type={flowerType}
+            rotation={rotation}
+          />
+        );
+      })}
 
       {/* Main game area - No scrolling, centered */}
       <div className="relative w-full h-full overflow-hidden flex items-start pt-32 justify-center">
