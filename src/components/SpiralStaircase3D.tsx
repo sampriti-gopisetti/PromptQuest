@@ -1,5 +1,8 @@
 import { Building3D } from './Building3D';
-import { OrbitControls, PerspectiveCamera, Environment } from '@react-three/drei';
+import { Tree3D } from './Tree3D';
+import { Road3D } from './Road3D';
+import { CityBlock3D } from './CityBlock3D';
+import { OrbitControls, PerspectiveCamera } from '@react-three/drei';
 import { useGameState } from '@/hooks/useGameState';
 
 interface SpiralStaircase3DProps {
@@ -10,12 +13,13 @@ interface SpiralStaircase3DProps {
 export const SpiralStaircase3D = ({ onBossClick, onLevelClick }: SpiralStaircase3DProps) => {
   const { currentLevel, completedLevels } = useGameState();
 
-  const getSpiralPosition = (level: number): [number, number, number] => {
-    const angle = ((level - 1) / 10) * Math.PI * 4; // 2 full rotations
-    const radius = 5;
+  const getCityPosition = (level: number): [number, number, number] => {
+    // Arrange buildings in a loose circular pattern expanding outward
+    const angle = ((level - 1) / 10) * Math.PI * 2.5;
+    const radius = 3 + (level - 1) * 0.8;
     const x = Math.cos(angle) * radius;
     const z = Math.sin(angle) * radius;
-    const y = (level - 1) * 1.5;
+    const y = 0; // All at ground level
     return [x, y, z];
   };
 
@@ -27,79 +31,111 @@ export const SpiralStaircase3D = ({ onBossClick, onLevelClick }: SpiralStaircase
     }
   };
 
+  const treeColors = ['#2D5016', '#3A6B1F', '#458B2A', '#52A332'];
+
   return (
     <>
-      {/* Camera */}
-      <PerspectiveCamera makeDefault position={[12, 15, 12]} fov={50} />
+      {/* Camera - More isometric/aerial view */}
+      <PerspectiveCamera makeDefault position={[0, 28, 12]} fov={45} />
       
       {/* Controls */}
       <OrbitControls
         enablePan={false}
         minDistance={15}
-        maxDistance={30}
-        maxPolarAngle={Math.PI / 2.2}
+        maxDistance={40}
+        maxPolarAngle={Math.PI / 2.5}
         autoRotate
-        autoRotateSpeed={0.5}
+        autoRotateSpeed={0.3}
       />
 
-      {/* Lighting */}
-      <ambientLight intensity={0.6} />
-      <directionalLight position={[10, 20, 10]} intensity={1} castShadow />
-      <pointLight position={[0, 15, 0]} intensity={0.5} color="#3B82F6" />
+      {/* Lighting - Bright and cheerful */}
+      <ambientLight intensity={1} />
+      <directionalLight 
+        position={[10, 20, 10]} 
+        intensity={0.8} 
+        castShadow 
+        shadow-mapSize-width={2048}
+        shadow-mapSize-height={2048}
+      />
+      <directionalLight position={[-10, 15, -5]} intensity={0.4} />
       
-      {/* Environment */}
-      <Environment preset="sunset" />
+      {/* Sky background */}
+      <color attach="background" args={['#87CEEB']} />
 
-      {/* Ground */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1, 0]} receiveShadow>
-        <circleGeometry args={[15, 64]} />
-        <meshStandardMaterial color="#0F172A" />
+      {/* Ground - Large grass area */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.01, 0]} receiveShadow>
+        <circleGeometry args={[30, 64]} />
+        <meshStandardMaterial color="#4ADE80" flatShading />
       </mesh>
 
-      {/* Buildings on spiral */}
+      {/* Buildings in city layout */}
       {Array.from({ length: 10 }, (_, i) => {
         const level = i + 1;
-        const position = getSpiralPosition(level);
+        const position = getCityPosition(level);
         const isLocked = level > currentLevel;
         const isActive = level === currentLevel;
         const isCompleted = completedLevels.includes(level);
         const isBoss = level === 10;
 
         return (
-          <Building3D
-            key={level}
-            level={level}
-            position={position}
-            isLocked={isLocked}
-            isActive={isActive}
-            isCompleted={isCompleted}
-            isBoss={isBoss}
-            onClick={() => handleBuildingClick(level)}
+          <group key={level}>
+            {/* City block (grass patch) */}
+            <CityBlock3D position={position} size={2.5} />
+            
+            {/* Building */}
+            <Building3D
+              level={level}
+              position={position}
+              isLocked={isLocked}
+              isActive={isActive}
+              isCompleted={isCompleted}
+              isBoss={isBoss}
+              onClick={() => handleBuildingClick(level)}
+            />
+
+            {/* Trees around building */}
+            <Tree3D 
+              position={[position[0] + 1.5, 0, position[2] + 1]} 
+              scale={0.8}
+              foliageColor={treeColors[i % treeColors.length]}
+            />
+            <Tree3D 
+              position={[position[0] - 1.2, 0, position[2] + 1.5]} 
+              scale={0.7}
+              foliageColor={treeColors[(i + 1) % treeColors.length]}
+            />
+            <Tree3D 
+              position={[position[0] + 1, 0, position[2] - 1.5]} 
+              scale={0.9}
+              foliageColor={treeColors[(i + 2) % treeColors.length]}
+            />
+          </group>
+        );
+      })}
+
+      {/* Roads connecting buildings */}
+      {Array.from({ length: 10 }, (_, i) => {
+        if (i === 9) return null;
+        const start = getCityPosition(i + 1);
+        const end = getCityPosition(i + 2);
+        
+        return (
+          <Road3D 
+            key={`road-${i}`} 
+            start={start} 
+            end={end}
+            width={1.2}
           />
         );
       })}
 
-      {/* Spiral path/stairs connecting buildings */}
-      {Array.from({ length: 10 }, (_, i) => {
-        if (i === 9) return null;
-        const start = getSpiralPosition(i + 1);
-        const end = getSpiralPosition(i + 2);
-        const midPoint: [number, number, number] = [
-          (start[0] + end[0]) / 2,
-          (start[1] + end[1]) / 2,
-          (start[2] + end[2]) / 2,
-        ];
-        
-        return (
-          <mesh key={`path-${i}`} position={midPoint}>
-            <boxGeometry args={[0.3, 0.1, 2]} />
-            <meshStandardMaterial color="#374151" />
-          </mesh>
-        );
-      })}
+      {/* Additional decorative trees */}
+      <Tree3D position={[0, 0, 0]} scale={1.2} foliageColor="#2D5016" />
+      <Tree3D position={[-5, 0, -5]} scale={1} foliageColor="#3A6B1F" />
+      <Tree3D position={[6, 0, -4]} scale={0.9} foliageColor="#458B2A" />
 
-      {/* Fog */}
-      <fog attach="fog" args={['#0F172A', 20, 50]} />
+      {/* Soft fog */}
+      <fog attach="fog" args={['#87CEEB', 25, 50]} />
     </>
   );
 };
