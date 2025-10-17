@@ -57,7 +57,7 @@ export const GameCompleteScreen = ({
       ))}
 
       {/* Main Content */}
-      <div className="relative bg-gradient-to-br from-yellow-200 via-yellow-100 to-orange-200 p-12 rounded-3xl border-4 border-black shadow-2xl animate-scale-in max-w-2xl mx-4">
+      <div className="relative bg-gradient-to-br from-yellow-200 via-yellow-100 to-orange-200 p-6 rounded-2xl border-4 border-black shadow-2xl animate-scale-in max-w-lg mx-4">
         <svg width="0" height="0">
           <defs>
             <filter id="sketch-outline">
@@ -76,48 +76,47 @@ export const GameCompleteScreen = ({
         </button>
 
         {/* Trophy Icon */}
-        <div className="flex justify-center mb-6">
-          <Trophy className="w-24 h-24 text-yellow-600 animate-bounce" />
+        <div className="flex justify-center mb-4">
+          <Trophy className="w-16 h-16 text-yellow-600 animate-bounce" />
         </div>
 
         {/* Congratulations Text */}
-        <h1 className="text-5xl font-black text-center mb-4 text-gray-900">
+        <h1 className="text-3xl font-black text-center mb-3 text-gray-900">
           🏆 CONGRATULATIONS! 🏆
         </h1>
         
-        <p className="text-2xl text-center mb-8 text-gray-800 font-bold">
+        <p className="text-lg text-center mb-6 text-gray-800 font-bold">
           You've conquered all 10 levels!
         </p>
 
         {/* Stats Display */}
-        <div className="space-y-4 mb-8">
+        <div className="space-y-3 mb-6">
           <div 
-            className="bg-white p-6 rounded-2xl border-4 border-black shadow-lg text-center"
+            className="bg-white p-4 rounded-xl border-4 border-black shadow-lg text-center"
             style={{ filter: 'url(#sketch-outline)' }}
           >
-            <div className="text-4xl font-black text-gray-900 mb-2">
+            <div className="text-2xl font-black text-gray-900 mb-1">
               💰 {totalPoints.toLocaleString()}
             </div>
-            <div className="text-lg text-gray-600 font-bold">Total Points</div>
+            <div className="text-sm text-gray-600 font-bold">Total Points</div>
           </div>
 
           <div 
-            className="bg-white p-6 rounded-2xl border-4 border-black shadow-lg text-center"
+            className="bg-white p-4 rounded-xl border-4 border-black shadow-lg text-center"
             style={{ filter: 'url(#sketch-outline)' }}
           >
-            <div className="text-4xl font-black text-gray-900 mb-2">
+            <div className="text-2xl font-black text-gray-900 mb-1">
               ⭐ 10/10
             </div>
-            <div className="text-lg text-gray-600 font-bold">Levels Completed</div>
+            <div className="text-sm text-gray-600 font-bold">Levels Completed</div>
           </div>
         </div>
 
         {/* Action Buttons */}
-        <div className="flex gap-4 justify-center">
+        <div className="flex gap-3 justify-center">
           <Button
             onClick={onPlayAgain}
-            size="lg"
-            className="bg-green-500 hover:bg-green-600 text-white font-black text-lg px-8 py-6 border-4 border-black shadow-lg"
+            className="bg-green-500 hover:bg-green-600 text-white font-black text-sm px-5 py-3 border-4 border-black shadow-lg"
             style={{ filter: 'url(#sketch-outline)' }}
           >
             🎮 Play Again
@@ -125,8 +124,7 @@ export const GameCompleteScreen = ({
           
           <Button
             onClick={onViewLeaderboard}
-            size="lg"
-            className="bg-blue-500 hover:bg-blue-600 text-white font-black text-lg px-8 py-6 border-4 border-black shadow-lg"
+            className="bg-blue-500 hover:bg-blue-600 text-white font-black text-sm px-5 py-3 border-4 border-black shadow-lg"
             style={{ filter: 'url(#sketch-outline)' }}
           >
             🏆 Leaderboard
