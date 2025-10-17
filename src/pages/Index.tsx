@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { Canvas } from '@react-three/fiber';
-import { SpiralStaircase3D } from '@/components/SpiralStaircase3D';
+import { CityMap2D } from '@/components/CityMap2D';
 import { PlayerStatus } from '@/components/PlayerStatus';
 import { LeaderboardButton } from '@/components/LeaderboardButton';
 import { Leaderboard } from '@/components/Leaderboard';
@@ -44,11 +43,9 @@ const Index = () => {
   };
 
   return (
-    <main className="relative w-screen h-screen overflow-hidden bg-gradient-to-b from-background to-slate-900">
-      {/* 3D Canvas */}
-      <Canvas shadows>
-        <SpiralStaircase3D onBossClick={handleBossClick} onLevelClick={handleLevelClick} />
-      </Canvas>
+    <main className="relative w-screen h-screen overflow-hidden bg-sky-200">
+      {/* 2D City Map */}
+      <CityMap2D onBossClick={handleBossClick} onLevelClick={handleLevelClick} />
 
       {/* UI Overlays */}
       <PlayerStatus points={points} level={currentLevel} />
