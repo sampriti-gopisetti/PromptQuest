@@ -1,1 +1,13 @@
 api/
+Dockerfile
+**/*.md
+**/*.MD
+**/*.map
+**/*.test.*
+**/__tests__
+**/coverage
+**/.vscode
+**/.idea
+**/.github
+**/*.local
+**/.env*
