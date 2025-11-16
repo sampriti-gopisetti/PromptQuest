@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: promptquest-backend
+    env: python
+    rootDir: Backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --workers 2 --threads 4 --preload --timeout 120
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false
+    autoDeploy: true
