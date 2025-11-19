@@ -36,7 +36,7 @@ export const FeedbackModal = ({
     <Dialog open={open} onOpenChange={onClose}>
       {/* Constrain height on mobile and add internal scroll for large feedback */}
       <DialogContent 
-        className="responsive-modal-width sm:max-w-[700px] border-4 border-black max-h-[90vh] sm:max-h-none flex flex-col" 
+        className="responsive-modal-width sm:max-w-[700px] border-4 border-black max-h-[90vh] sm:max-h-[85vh] flex flex-col" 
         style={{ filter: 'url(#sketch-outline)', zIndex: 9999 }}
       >
         <DialogHeader>
@@ -53,7 +53,7 @@ export const FeedbackModal = ({
           </button>
         </DialogClose>
 
-        {/* Scrollable content region (flex-1) */}
+        {/* Scrollable content region (flex-1); always scroll when overflow */}
         <div className="space-y-4 py-2 flex-1 overflow-y-auto pr-1">
           {/* Question Display */}
           <div className="space-y-2">
@@ -99,7 +99,8 @@ export const FeedbackModal = ({
             <Label className="text-lg font-bold">
               Feedback:
             </Label>
-            <div className="max-h-[30vh] sm:max-h-none overflow-y-auto">
+            {/* Feedback scroll area: limit on both mobile and desktop */}
+            <div className="max-h-[30vh] sm:max-h-[40vh] overflow-y-auto">
               <div
                 className="p-4 rounded-lg border-3 border-black bg-white min-h-[96px] text-sm sm:text-base text-black whitespace-pre-wrap"
                 style={{ filter: 'url(#sketch-outline)' }}

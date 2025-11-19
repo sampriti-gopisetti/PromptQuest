@@ -52,7 +52,7 @@ export const QuestionModal = ({ open, onClose, level, onSubmit, isSubmitting = f
   return (
     <Dialog open={open} onOpenChange={onClose}>
       {/* Restore original desktop max width while keeping mobile 95vw utility */}
-        <DialogContent className="responsive-modal-width sm:max-w-[900px] border-4 border-black max-h-[90vh] flex flex-col" style={{ filter: 'url(#sketch-outline)', zIndex: 9999 }}>
+        <DialogContent className="responsive-modal-width sm:max-w-[900px] border-4 border-black max-h-[90vh] sm:max-h-[85vh] flex flex-col" style={{ filter: 'url(#sketch-outline)', zIndex: 9999 }}>
         <DialogHeader>
           <DialogTitle className="text-2xl font-black text-center">
             Level {level} Challenge
