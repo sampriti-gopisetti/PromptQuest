@@ -32,9 +32,9 @@ export const FeedbackModal = ({
 }: FeedbackModalProps) => {
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      {/* Restore original desktop max width while keeping mobile responsiveness */}
+      {/* Constrain height on mobile and add internal scroll for large feedback */}
       <DialogContent 
-        className="responsive-modal-width sm:max-w-[700px] border-4 border-black" 
+        className="responsive-modal-width sm:max-w-[700px] border-4 border-black max-h-[90vh] sm:max-h-none flex flex-col" 
         style={{ filter: 'url(#sketch-outline)', zIndex: 9999 }}
       >
         <DialogHeader>
@@ -43,7 +43,8 @@ export const FeedbackModal = ({
           </DialogTitle>
         </DialogHeader>
 
-        <div className="space-y-4 py-2">
+        {/* Scrollable content region (flex-1) */}
+        <div className="space-y-4 py-2 flex-1 overflow-y-auto pr-1">
           {/* Question Display */}
           <div className="space-y-2">
             <Label className="text-lg font-bold">
@@ -88,11 +89,13 @@ export const FeedbackModal = ({
             <Label className="text-lg font-bold">
               Feedback:
             </Label>
-            <div
-              className="p-4 rounded-lg border-3 border-black bg-white min-h-[96px] text-sm sm:text-base text-black whitespace-pre-wrap"
-              style={{ filter: 'url(#sketch-outline)' }}
-            >
-              {feedback}
+            <div className="max-h-[30vh] sm:max-h-none overflow-y-auto">
+              <div
+                className="p-4 rounded-lg border-3 border-black bg-white min-h-[96px] text-sm sm:text-base text-black whitespace-pre-wrap"
+                style={{ filter: 'url(#sketch-outline)' }}
+              >
+                {feedback}
+              </div>
             </div>
           </div>
         </div>
