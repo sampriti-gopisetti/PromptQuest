@@ -1,6 +1,11 @@
 # PromptQuest
 
-PromptQuest is a game for learning high–quality prompt engineering. The app uses a Vite + React (TypeScript) frontend and a Flask backend that scores prompts via Google’s Gemini models.
+> A web-based game to learn high‑quality prompt engineering with real-time scoring powered by Google Gemini.
+
+[▶️ Play PromptQuest Live](https://your-frontend.vercel.app)  
+Backend API: https://promptquest-backend-xxxx-uc.a.run.app (replace with your Cloud Run URL)
+
+![PromptQuest Gameplay](assets/game.png)
 
 ## Tech Stack
 - Frontend: Vite, React, TypeScript, Tailwind, Radix UI
@@ -22,11 +27,13 @@ PromptQuest is a game for learning high–quality prompt engineering. The app us
 
 ## Repository Layout
 ```
-/ (repo root)
-	Frontend/            # Vite React app
-	Backend/             # Flask API (Cloud Run)
-	vercel.json          # Root (optional if deploying Frontend/ directly)
-	DEPLOYMENT.md        # Detailed deploy steps (Vercel + Cloud Run)
+.
+├── Backend/             # Flask API, Dockerfile, requirements.txt
+├── Frontend/            # Vite React app (TypeScript), package.json
+├── assets/              # Repo assets (README images, etc.)
+├── DEPLOYMENT.md        # Detailed deploy steps (Vercel + Cloud Run)
+├── vercel.json          # Root Vercel config (optional, if deploying Frontend/ directly)
+└── README.md
 ```
 
 ## Local Development (Split)
@@ -73,9 +80,13 @@ Frontend (Vercel)
 - Backend: `GEMINI_API_KEY` (Cloud Run env var; never commit secrets)
 - Frontend: `VITE_API_BASE_URL` (set on Vercel; compile-time for Vite)
 
-## Notes & Lessons Learned
+## Technical Retrospective
 - Serverless Python locally on Windows can be brittle (PATH, runtime detection). A containerized Flask on Cloud Run was smoother and more predictable.
 - Keep frontend and backend clearly split; point the app via `VITE_API_BASE_URL`.
 - Never store API keys in frontend `.env` files in Git; use platform env vars.
+ - Attempts summary:
+	 - Vercel serverless (Python under `api/`): simple in theory, but local dev and runtime config were flaky on Windows; routing required careful `vercel.json` hygiene.
+	 - Split with Render: workable but added platform overhead and occasional cold‑start delays.
+	 - Final: Vercel (static frontend) + Cloud Run (containerized backend) provided the most reliable DX and production stability.
 
 For step-by-step commands and troubleshooting, see `DEPLOYMENT.md`.
