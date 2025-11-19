@@ -2,8 +2,7 @@
 
 > A web-based game to learn high‑quality prompt engineering with real-time scoring powered by Google Gemini.
 
-[▶️ Play PromptQuest Live](https://your-frontend.vercel.app)  
-Backend API: https://promptquest-backend-xxxx-uc.a.run.app (replace with your Cloud Run URL)
+[▶️ Play PromptQuest Live](https://prompt-quest-theta.vercel.app/)  
 
 ![PromptQuest Gameplay](assets/game.png)
 
