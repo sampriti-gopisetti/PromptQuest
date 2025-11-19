@@ -18,6 +18,7 @@ interface LeaderboardProps {
 
 export const Leaderboard = ({ open, onClose }: LeaderboardProps) => {
   const { points, currentLevel, playerName } = useGameState();
+  const isMobile = typeof window !== 'undefined' && window.matchMedia('(max-width: 640px)').matches;
   
   // Show only current player until multiplayer is implemented
   const currentPlayerData: LeaderboardEntry[] = [
@@ -51,13 +52,19 @@ export const Leaderboard = ({ open, onClose }: LeaderboardProps) => {
 
   return (
     <Sheet open={open} onOpenChange={onClose}>
-      <SheetContent side="right" className="w-full sm:max-w-md overflow-y-auto">
+      <SheetContent
+        side={isMobile ? 'bottom' : 'right'}
+        className={cn(
+          'overflow-y-auto',
+          isMobile ? 'h-[55vh] w-full rounded-t-xl' : 'w-full sm:max-w-md'
+        )}
+      >
         <SheetHeader>
-          <SheetTitle className="text-3xl font-bold flex items-center gap-2">
+          <SheetTitle className="text-2xl sm:text-3xl font-bold flex items-center gap-2">
             <Trophy className="w-8 h-8 text-yellow-400" />
             Your Progress
           </SheetTitle>
-          <SheetDescription>Track your journey through Prompt Quest</SheetDescription>
+          <SheetDescription className="text-xs sm:text-sm">Track your journey through Prompt Quest</SheetDescription>
         </SheetHeader>
 
         <div className="mt-6 space-y-3">
@@ -87,16 +94,16 @@ export const Leaderboard = ({ open, onClose }: LeaderboardProps) => {
                 </div>
 
                 <div className="text-right">
-                  <p className="font-bold text-lg">{entry.points.toLocaleString()}</p>
-                  <p className="text-xs text-muted-foreground">points</p>
+                  <p className="font-bold text-base sm:text-lg">{entry.points.toLocaleString()}</p>
+                  <p className="text-[10px] sm:text-xs text-muted-foreground">points</p>
                 </div>
               </div>
             </div>
           ))}
         </div>
 
-        <div className="mt-6 p-4 rounded-lg bg-primary/10 border border-primary/20">
-          <p className="text-sm text-center text-muted-foreground">
+        <div className="mt-6 p-3 sm:p-4 rounded-lg bg-primary/10 border border-primary/20">
+          <p className="text-xs sm:text-sm text-center text-muted-foreground">
             Complete challenges to climb the ranks! 🚀
           </p>
         </div>

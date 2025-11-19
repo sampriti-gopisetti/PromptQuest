@@ -60,11 +60,12 @@ All colors MUST be HSL.
   }
 
   html, body {
-    overflow: hidden !important;
-    width: 100vw;
-    height: 100vh;
+    /* Allow vertical scrolling on small screens; avoid hard 100vh which causes mobile browser chrome issues */
+    min-height: 100%;
+    width: 100%;
     margin: 0;
     padding: 0;
+    overflow-x: hidden;
   }
 
   body {
@@ -74,9 +75,24 @@ All colors MUST be HSL.
 
   #root {
     width: 100%;
-    height: 100%;
-    overflow: hidden;
+    min-height: 100vh;
     position: relative;
+    /* Allow interior components like modals to scroll independently */
+    overflow: visible;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Utility class for responsive modal max widths */
+  .responsive-modal-width {
+    width: 95vw;
+    max-width: 640px; /* Base max width */
+  }
+  @media (min-width: 768px) { /* md */
+    .responsive-modal-width { max-width: 720px; }
+  }
+  @media (min-width: 1024px) { /* lg */
+    .responsive-modal-width { max-width: 900px; }
   }
 
   @keyframes float {

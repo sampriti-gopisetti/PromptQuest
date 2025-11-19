@@ -60,6 +60,50 @@ This project is built with:
 - shadcn-ui
 - Tailwind CSS
 
+## Responsive Design Guidelines
+
+Recent improvements added mobile-first responsiveness:
+
+- Added an `xs (480px)` breakpoint in `tailwind.config.ts` for very small devices.
+- Removed forced `overflow: hidden` on `html, body` to allow natural vertical scrolling and avoid mobile 100vh issues.
+- Converted the main game container in `Index.tsx` to `w-full min-h-screen` instead of `w-screen h-screen` to prevent horizontal jitter and better handle mobile browser chrome.
+- Introduced a utility class `.responsive-modal-width` (see `src/index.css`) that scales modal max-widths across breakpoints.
+- Updated `QuestionModal` and `FeedbackModal` to use adaptive text sizes (`text-sm sm:text-base`) and the new responsive width utility.
+- Adjusted `PlayerStatus` to shrink and reposition on small screens using percentage width and `xs` breakpoint.
+
+### Adding Responsive Components
+
+Use Tailwind’s mobile-first classes. Example pattern:
+
+```tsx
+<div className="p-3 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+	{/* items */}
+</div>
+```
+
+### Modal Pattern
+
+Wrap dialog content with `responsive-modal-width` and avoid fixed pixel widths:
+
+```tsx
+<DialogContent className="responsive-modal-width border-4 border-black" />
+```
+
+### Common Pitfalls Avoided
+
+- Avoid hard `100vh` on mobile: use `min-h-screen`.
+- Avoid `w-screen` unless you need to force canvas width; prefer `w-full` in layouts.
+- Keep text readable: scale font sizes with `text-sm sm:text-base md:text-lg` as needed.
+- Constrain large grids or 3D/canvas elements; conditionally hide heavy visuals for very small screens if performance becomes an issue.
+
+### Next Steps (Optional)
+
+- Introduce conditional rendering or simplified map for devices narrower than 480px.
+- Add integration tests for layout (e.g., using Playwright) to ensure modals fit within viewport.
+- Consider a `Layout` component encapsulating top-left status and map for future multi-page expansion.
+
+## Deployment Notes
+
 ## How can I deploy this project?
 
 Simply open [Lovable](https://lovable.dev/projects/62ef0233-10a5-48cb-918c-9fd7ccee79fb) and click on Share -> Publish.

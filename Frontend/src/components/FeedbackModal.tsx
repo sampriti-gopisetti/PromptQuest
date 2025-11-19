@@ -32,8 +32,9 @@ export const FeedbackModal = ({
 }: FeedbackModalProps) => {
   return (
     <Dialog open={open} onOpenChange={onClose}>
+      {/* Restore original desktop max width while keeping mobile responsiveness */}
       <DialogContent 
-        className="sm:max-w-[700px] border-4 border-black" 
+        className="responsive-modal-width sm:max-w-[700px] border-4 border-black" 
         style={{ filter: 'url(#sketch-outline)', zIndex: 9999 }}
       >
         <DialogHeader>
@@ -49,7 +50,7 @@ export const FeedbackModal = ({
               Requirement
             </Label>
             <div
-              className="p-3 rounded-lg border-3 border-black bg-blue-100 min-h-[48px] flex items-center text-base text-black"
+              className="p-3 rounded-lg border-3 border-black bg-blue-100 min-h-[48px] flex items-center text-sm sm:text-base text-black"
               style={{ filter: 'url(#sketch-outline)' }}
             >
               {question}
@@ -62,7 +63,7 @@ export const FeedbackModal = ({
               Prompt Given
             </Label>
             <div
-              className="p-3 rounded-lg border-3 border-black bg-gray-100 min-h-[48px] text-base text-black whitespace-pre-wrap"
+              className="p-3 rounded-lg border-3 border-black bg-gray-100 min-h-[48px] text-sm sm:text-base text-black whitespace-pre-wrap"
               style={{ filter: 'url(#sketch-outline)' }}
             >
               {userAnswer}
@@ -75,7 +76,7 @@ export const FeedbackModal = ({
               Score
             </Label>
             <div
-              className="p-3 rounded-lg border-3 border-black bg-purple-100 min-h-[48px] flex items-center justify-center text-xl font-black text-black"
+              className="p-3 rounded-lg border-3 border-black bg-purple-100 min-h-[48px] flex items-center justify-center text-lg sm:text-xl font-black text-black"
               style={{ filter: 'url(#sketch-outline)' }}
             >
               🎉 +{score} points
@@ -88,7 +89,7 @@ export const FeedbackModal = ({
               Feedback:
             </Label>
             <div
-              className="p-4 rounded-lg border-3 border-black bg-white min-h-[96px] text-base text-black whitespace-pre-wrap"
+              className="p-4 rounded-lg border-3 border-black bg-white min-h-[96px] text-sm sm:text-base text-black whitespace-pre-wrap"
               style={{ filter: 'url(#sketch-outline)' }}
             >
               {feedback}
@@ -99,7 +100,7 @@ export const FeedbackModal = ({
         <DialogFooter>
           <Button
             onClick={onNextLevel}
-            className="w-full text-lg font-bold py-4 bg-gradient-to-r from-purple-400 to-purple-600 hover:from-purple-500 hover:to-purple-700 border-3 border-black animate-pulse hover:animate-none"
+            className="w-full text-base sm:text-lg font-bold py-4 bg-gradient-to-r from-purple-400 to-purple-600 hover:from-purple-500 hover:to-purple-700 border-3 border-black animate-pulse hover:animate-none"
             style={{ filter: 'url(#sketch-outline)' }}
           >
             {score >= 60 ? 'Next Level' : 'Try Again'}

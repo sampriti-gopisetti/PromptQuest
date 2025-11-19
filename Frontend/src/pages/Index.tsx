@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { CityMap2D } from '@/components/CityMap2D';
 import { PlayerStatus } from '@/components/PlayerStatus';
 import { LeaderboardButton } from '@/components/LeaderboardButton';
 import { Leaderboard } from '@/components/Leaderboard';
+import { MobileLeaderboardBar } from '@/components/MobileLeaderboardBar';
 import { BossWarningDialog } from '@/components/BossWarningDialog';
 import { CelebrationFireworks } from '@/components/CelebrationFireworks';
 import { QuestionModal } from '@/components/QuestionModal';
@@ -121,8 +122,75 @@ const Index = () => {
     }, 300);
   };
 
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 640px)');
+    const handler = () => setIsMobile(mq.matches);
+    handler();
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
+
+  if (isMobile) {
+    return (
+      <main className="flex flex-col w-full h-screen bg-sky-200">
+        {/* Top status */}
+        <div className="relative z-10">
+          <PlayerStatus points={points} level={currentLevel} className="static w-full" />
+        </div>
+        {/* Horizontally scrollable map */}
+        <div className="flex-1 relative overflow-x-auto overflow-y-hidden touch-pan-x">
+          <CityMap2D
+            onBossClick={handleBossClick}
+            onLevelClick={handleLevelClick}
+            onCharacterArrival={handleCharacterArrival}
+            horizontalScroll
+            className="min-w-[1000px]"
+          />
+        </div>
+        {/* Bottom leaderboard bar */}
+        <MobileLeaderboardBar onOpenFull={() => setShowLeaderboard(true)} />
+
+        {/* Modals & Sheets */}
+        <Leaderboard open={showLeaderboard} onClose={() => setShowLeaderboard(false)} />
+        <BossWarningDialog
+          open={showBossWarning}
+          onAccept={handleBossAccept}
+          onCancel={() => setShowBossWarning(false)}
+        />
+        <QuestionModal
+          open={showQuestionModal}
+          onClose={() => {
+            setShowQuestionModal(false);
+            setCurrentQuestionLevel(null);
+          }}
+          level={currentQuestionLevel || 1}
+          onSubmit={handleAnswerSubmit}
+          isSubmitting={isSubmitting}
+        />
+        <FeedbackModal
+          open={showFeedbackModal}
+          onClose={() => {
+            setShowFeedbackModal(false);
+            setCurrentQuestionLevel(null);
+          }}
+          question={currentQuestion}
+          userAnswer={submittedAnswer}
+          score={earnedScore}
+          feedback={evaluationFeedback}
+          level={currentQuestionLevel || 1}
+          onNextLevel={handleNextLevel}
+        />
+        {showCelebration && (
+          <CelebrationFireworks onComplete={() => setShowCelebration(false)} />
+        )}
+        <LoadingOverlay show={isSubmitting} message="AI Guru is working..." />
+      </main>
+    );
+  }
+
   return (
-    <main className="relative w-screen h-screen overflow-hidden bg-sky-200">
+    <main className="relative w-full min-h-screen bg-sky-200 overflow-hidden">
       {/* 2D City Map */}
       <CityMap2D 
         onBossClick={handleBossClick} 

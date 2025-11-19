@@ -49,7 +49,8 @@ export const QuestionModal = ({ open, onClose, level, onSubmit, isSubmitting = f
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-        <DialogContent className="sm:max-w-[900px] border-4 border-black" style={{ filter: 'url(#sketch-outline)', zIndex: 9999 }}>
+      {/* Restore original desktop max width while keeping mobile 95vw utility */}
+      <DialogContent className="responsive-modal-width sm:max-w-[900px] border-4 border-black" style={{ filter: 'url(#sketch-outline)', zIndex: 9999 }}>
         <DialogHeader>
           <DialogTitle className="text-2xl font-black text-center">
             Level {level} Challenge
@@ -64,7 +65,7 @@ export const QuestionModal = ({ open, onClose, level, onSubmit, isSubmitting = f
             </Label>
             <div
               id="question"
-              className="p-4 rounded-lg border-3 border-black bg-blue-50 min-h-[100px] flex items-center text-lg font-semibold text-black"
+              className="p-4 rounded-lg border-3 border-black bg-blue-50 min-h-[100px] flex items-center text-base sm:text-lg font-semibold text-black"
               style={{ filter: 'url(#sketch-outline)' }}
             >
                 {questionText}
@@ -80,8 +81,8 @@ export const QuestionModal = ({ open, onClose, level, onSubmit, isSubmitting = f
               id="answer"
               value={answer}
               onChange={(e) => setAnswer(e.target.value)}
-                placeholder="Type your prompt here (what you'd send to an AI to solve the challenge)..."
-              className="min-h-[120px] border-3 border-black text-base"
+              placeholder="Type your prompt here (what you'd send to an AI to solve the challenge)..."
+              className="min-h-[140px] border-3 border-black text-sm sm:text-base"
               style={{ filter: 'url(#sketch-outline)' }}
             />
           </div>
@@ -100,7 +101,7 @@ export const QuestionModal = ({ open, onClose, level, onSubmit, isSubmitting = f
             </Button>
             {showHint && (
               <div
-                className="p-4 rounded-lg border-3 border-black bg-yellow-50 text-base italic text-black"
+                className="p-4 rounded-lg border-3 border-black bg-yellow-50 text-sm sm:text-base italic text-black"
                 style={{ filter: 'url(#sketch-outline)' }}
               >
                   💡 Tip: Strong prompts define format, persona, and constraints. For example, ask for a Markdown table, a friendly tutor persona, and 'exactly 5 items'.
@@ -113,7 +114,7 @@ export const QuestionModal = ({ open, onClose, level, onSubmit, isSubmitting = f
           <Button
             onClick={handleSubmit}
             disabled={!answer.trim() || isSubmitting}
-            className="w-full text-lg font-bold py-6 bg-gradient-to-r from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 border-3 border-black animate-pulse hover:animate-none"
+            className="w-full text-base sm:text-lg font-bold py-4 sm:py-6 bg-gradient-to-r from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 border-3 border-black animate-pulse hover:animate-none"
             style={{ filter: 'url(#sketch-outline)' }}
           >
             Submit

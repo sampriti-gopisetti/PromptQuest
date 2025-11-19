@@ -13,6 +13,10 @@ export default {
       },
     },
     extend: {
+      // Add an extra-small breakpoint for very small devices
+      screens: {
+        xs: "480px",
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

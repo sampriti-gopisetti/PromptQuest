@@ -12,16 +12,20 @@ interface CityMap2DProps {
   onBossClick: () => void;
   onLevelClick: (level: number) => void;
   onCharacterArrival?: (level: number) => void;
+  verticalLayout?: boolean; // optional vertical layout (not used for mobile anymore)
+  scrollable?: boolean; // vertical scroll flag
+  horizontalScroll?: boolean; // enable horizontal scrolling of map area (mobile)
+  className?: string; // extra classes for outer container
 }
 
-export const CityMap2D = ({ onBossClick, onLevelClick, onCharacterArrival }: CityMap2DProps) => {
+export const CityMap2D = ({ onBossClick, onLevelClick, onCharacterArrival, verticalLayout = false, scrollable = false, horizontalScroll = false, className = '' }: CityMap2DProps) => {
   const { currentLevel, completedLevels } = useGameState();
   const [characterPos, setCharacterPos] = useState({ x: 0, y: 0 });
   const [characterState, setCharacterState] = useState<'idle' | 'running' | 'entering' | 'celebrating'>('idle');
   const [characterDirection, setCharacterDirection] = useState<'left' | 'right'>('right');
   const [particles, setParticles] = useState<Array<{ id: number; pos: { x: number; y: number }; type: 'confetti' | 'dust' | 'sparkle' | 'star' }>>([]);
 
-  // Horizontal snake path positions - centered
+  // Horizontal snake path positions - centered (desktop)
   const getSnakePosition = (level: number): { x: number; y: number } => {
     const colWidth = 200; // Wider spacing for horizontal layout
     const rowHeight = 220; // More vertical spacing
@@ -37,9 +41,16 @@ export const CityMap2D = ({ onBossClick, onLevelClick, onCharacterArrival }: Cit
     return { x, y };
   };
 
+  // Vertical candy-crush like path (mobile)
+  const getVerticalPosition = (level: number): { x: number; y: number } => {
+    const ySpacing = 220; // vertical distance between levels
+    // center horizontally similar to existing 1000px width area
+    return { x: 500, y: 120 + (level - 1) * ySpacing };
+  };
+
   // Starting position BEFORE Level 1
   const getStartPosition = (): { x: number; y: number } => {
-    const level1Pos = getSnakePosition(1);
+    const level1Pos = verticalLayout ? getVerticalPosition(1) : getSnakePosition(1);
     return { x: level1Pos.x - 150, y: level1Pos.y };
   };
 
@@ -52,7 +63,7 @@ export const CityMap2D = ({ onBossClick, onLevelClick, onCharacterArrival }: Cit
   // Auto-move character when currentLevel changes
   useEffect(() => {
     if (currentLevel > 1) {
-      const targetPos = getSnakePosition(currentLevel);
+      const targetPos = verticalLayout ? getVerticalPosition(currentLevel) : getSnakePosition(currentLevel);
       const currentPos = characterPos;
       
       // Only move if we're not already at the target
@@ -114,7 +125,7 @@ export const CityMap2D = ({ onBossClick, onLevelClick, onCharacterArrival }: Cit
   };
 
   const moveCharacterToBuilding = (level: number) => {
-    const targetPos = getSnakePosition(level);
+    const targetPos = verticalLayout ? getVerticalPosition(level) : getSnakePosition(level);
     setCharacterDirection(targetPos.x > characterPos.x ? 'right' : 'left');
     setCharacterState('running');
 
@@ -165,8 +176,19 @@ export const CityMap2D = ({ onBossClick, onLevelClick, onCharacterArrival }: Cit
     setParticles(prev => prev.filter(p => p.id !== id));
   };
 
+  // dynamic total map height for vertical layout
+  const totalMapHeight = verticalLayout ? 120 + 220 * 9 + 400 : 500;
+  const outerHeightClass = scrollable ? 'min-h-[1400px]' : 'h-screen';
+  const overflowClass = horizontalScroll
+    ? 'overflow-x-auto overflow-y-hidden touch-pan-x'
+    : scrollable
+      ? 'overflow-visible'
+      : 'overflow-hidden';
   return (
-    <div className="relative w-full h-screen overflow-hidden" style={{ background: 'linear-gradient(to bottom, #87CEEB 0%, #98D8F4 30%, #F5E6D3 70%, #98FB98 100%)' }}>
+    <div
+      className={`relative w-full ${outerHeightClass} ${overflowClass} ${className}`}
+      style={{ background: 'linear-gradient(to bottom, #87CEEB 0%, #98D8F4 30%, #F5E6D3 70%, #98FB98 100%)' }}
+    >
       <SketchFilter />
 
       {/* Decorative clouds */}
@@ -234,21 +256,21 @@ export const CityMap2D = ({ onBossClick, onLevelClick, onCharacterArrival }: Cit
         );
       })}
 
-      {/* Main game area - No scrolling, centered */}
-      <div className="relative w-full h-full overflow-hidden flex items-start pt-32 justify-center">
-        <div className="relative" style={{ width: '1000px', height: '500px' }}>
+      {/* Main game area */}
+      <div className="relative w-full h-full overflow-visible flex items-start pt-32 justify-center">
+        <div className="relative" style={{ width: '1000px', height: `${totalMapHeight}px` }}>
 
           {/* Roads connecting buildings in snake pattern */}
           {Array.from({ length: 9 }, (_, i) => {
-            const start = getSnakePosition(i + 1);
-            const end = getSnakePosition(i + 2);
+            const start = verticalLayout ? getVerticalPosition(i + 1) : getSnakePosition(i + 1);
+            const end = verticalLayout ? getVerticalPosition(i + 2) : getSnakePosition(i + 2);
             return <SketchyRoad2D key={`road-${i}`} start={start} end={end} width={35} />;
           })}
 
           {/* Buildings */}
           {Array.from({ length: 10 }, (_, i) => {
           const level = i + 1;
-          const position = getSnakePosition(level);
+          const position = verticalLayout ? getVerticalPosition(level) : getSnakePosition(level);
           const isLocked = level > currentLevel;
           const isActive = level === currentLevel;
           const isCompleted = completedLevels.includes(level);
