@@ -133,23 +133,26 @@ const Index = () => {
 
   if (isMobile) {
     return (
-      <main className="flex flex-col w-full h-screen bg-sky-200">
-        {/* Top status */}
-        <div className="relative z-10">
-          <PlayerStatus points={points} level={currentLevel} className="static w-full" />
+      <main className="relative w-full h-screen bg-sky-200 overflow-hidden">
+        {/* Fixed overlays */}
+        <div className="fixed top-0 left-0 right-0 z-40 px-2 pt-2">
+          <PlayerStatus points={points} level={currentLevel} className="w-full" />
         </div>
-        {/* Horizontally scrollable map */}
-        <div className="flex-1 relative overflow-x-auto overflow-y-hidden touch-pan-x">
-          <CityMap2D
-            onBossClick={handleBossClick}
-            onLevelClick={handleLevelClick}
-            onCharacterArrival={handleCharacterArrival}
-            horizontalScroll
-            className="min-w-[1000px]"
-          />
+        <div className="fixed bottom-0 left-0 right-0 z-40">
+          <MobileLeaderboardBar onOpenFull={() => setShowLeaderboard(true)} />
         </div>
-        {/* Bottom leaderboard bar */}
-        <MobileLeaderboardBar onOpenFull={() => setShowLeaderboard(true)} />
+        {/* Scroll region between overlays */}
+        <div className="absolute top-[110px] bottom-[48px] left-0 right-0 overflow-x-auto overflow-y-hidden touch-pan-x">
+          <div className="min-w-[1000px] h-full">
+            <CityMap2D
+              onBossClick={handleBossClick}
+              onLevelClick={handleLevelClick}
+              onCharacterArrival={handleCharacterArrival}
+              horizontalScroll
+              className="h-full"
+            />
+          </div>
+        </div>
 
         {/* Modals & Sheets */}
         <Leaderboard open={showLeaderboard} onClose={() => setShowLeaderboard(false)} />

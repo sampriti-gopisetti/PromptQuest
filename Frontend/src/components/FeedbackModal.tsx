@@ -4,7 +4,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
+  DialogClose,
 } from '@/components/ui/dialog';
+import { X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { ArrowRight } from 'lucide-react';
@@ -42,6 +44,14 @@ export const FeedbackModal = ({
             Level {level} - Result
           </DialogTitle>
         </DialogHeader>
+        <DialogClose asChild>
+          <button
+            aria-label="Close"
+            className="absolute right-3 top-3 w-8 h-8 flex items-center justify-center rounded-full bg-red-500 text-white text-sm shadow-md active:scale-95"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </DialogClose>
 
         {/* Scrollable content region (flex-1) */}
         <div className="space-y-4 py-2 flex-1 overflow-y-auto pr-1">

@@ -5,7 +5,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
+  DialogClose,
 } from '@/components/ui/dialog';
+import { X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
@@ -50,14 +52,22 @@ export const QuestionModal = ({ open, onClose, level, onSubmit, isSubmitting = f
   return (
     <Dialog open={open} onOpenChange={onClose}>
       {/* Restore original desktop max width while keeping mobile 95vw utility */}
-      <DialogContent className="responsive-modal-width sm:max-w-[900px] border-4 border-black" style={{ filter: 'url(#sketch-outline)', zIndex: 9999 }}>
+        <DialogContent className="responsive-modal-width sm:max-w-[900px] border-4 border-black max-h-[90vh] flex flex-col" style={{ filter: 'url(#sketch-outline)', zIndex: 9999 }}>
         <DialogHeader>
           <DialogTitle className="text-2xl font-black text-center">
             Level {level} Challenge
           </DialogTitle>
         </DialogHeader>
-
-        <div className="space-y-6 py-4">
+          {/* Explicit close button (in addition to implicit one) */}
+          <DialogClose asChild>
+            <button
+              aria-label="Close"
+              className="absolute right-3 top-3 w-8 h-8 flex items-center justify-center rounded-full bg-red-500 text-white text-sm shadow-md active:scale-95"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </DialogClose>
+        <div className="space-y-6 py-4 flex-1 overflow-y-auto pr-1">
           {/* Question Area */}
           <div className="space-y-2">
             <Label htmlFor="question" className="text-lg font-bold">
