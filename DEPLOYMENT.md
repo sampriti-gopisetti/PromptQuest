@@ -1,48 +1,50 @@
-# PromptQuest Vercel Deployment Guide
+# Deployment Guide (Frontend on Vercel, Backend on Google Cloud Run)
 
-This project deploys as two Vercel projects:
-- Frontend: Vite React app (static site)
-- Backend: Flask API (serverless Python)
-
-Follow these steps carefully. If you previously tried a single-domain setup, remove any `api/` or `vercel.json` from the Frontend before deploying.
+Stable split setup: static Frontend on Vercel, persistent Flask Backend on Google Cloud Run. This avoids serverless complexity and gives you a single Backend URL you can reuse locally and in production.
 
 ---
 
-## 1) Backend (Flask API)
+## 1) Backend (Flask on Cloud Run)
 
 Project root: `Backend/`
 
 Already present and required:
-- `Backend/app.py` – Flask app with routes `/health`, `/api/levels`, `/api/evaluate`
-- `Backend/api/index.py` – WSGI adapter for Vercel (`vercel_python_wsg`)
-- `Backend/requirements.txt` – includes `vercel-python-wsgi`, `flask`, `flask-cors`, `python-dotenv`, `google-generativeai`
-- `Backend/vercel.json` – routes `/api/*` and `/health` to `api/index.py` with `python3.11` runtime
+- `Backend/app.py` – Flask app with `/health`, `/api/levels`, `/api/evaluate`
 - `Backend/levels.py`
-- `Backend/.env.example` – do not commit real keys
+- `Backend/requirements.txt` – includes `flask`, `flask-cors`, `python-dotenv`, `google-generativeai`, `gunicorn`
+- `Backend/Dockerfile` – container for Cloud Run (added)
+- `Backend/.dockerignore`
 
-Steps:
-1. In Vercel, create a New Project for the backend. Set "Root Directory" to `Backend`.
-2. Settings → Environment Variables:
-   - `GEMINI_API_KEY = <your key>` (Production; add Preview if needed)
-3. Build & Development Settings:
-   - Framework Preset: Other
-   - Install Command: `pip install -r requirements.txt`
-   - Build Command: (leave empty)
-   - Output Directory: (leave empty)
-4. Deploy.
-5. Verify the deployment:
-   - `https://<your-backend>.vercel.app/health` returns `{ status: "ok", gemini_configured: true }`.
-   - API endpoints:
-     - `GET https://<your-backend>.vercel.app/api/levels`
-     - `POST https://<your-backend>.vercel.app/api/evaluate`
+Steps (gcloud CLI):
+1. Authenticate and set project/region
+   ```cmd
+   gcloud auth login
+   gcloud config set project <YOUR_GCP_PROJECT_ID>
+   gcloud config set run/region <YOUR_REGION>   ^  e.g. us-central1
+   ```
+2. Build and deploy to Cloud Run
+   ```cmd
+   cd Backend
+   gcloud builds submit --tag gcr.io/%PROJECT_ID%/promptquest-backend
+   gcloud run deploy promptquest-backend ^
+     --image gcr.io/%PROJECT_ID%/promptquest-backend ^
+     --platform managed ^
+     --allow-unauthenticated ^
+     --set-env-vars GEMINI_API_KEY=<YOUR_GEMINI_API_KEY>
+   ```
+3. Note the Service URL Cloud Run prints, e.g. `https://promptquest-backend-xxxx-uc.a.run.app`
+4. Verify:
+   - `GET <SERVICE_URL>/health` returns `{ status: "ok", gemini_configured: true }`
+   - `GET <SERVICE_URL>/api/levels`
+   - `POST <SERVICE_URL>/api/evaluate`
 
 Notes:
-- Never store real keys in git. Put them in Vercel Env Vars.
-- Optional CORS hardening: In `app.py`, you can restrict origins, e.g. `CORS(app, resources={r"/*": {"origins": "https://<your-frontend>.vercel.app"}})` once your Frontend URL is known.
+- Store real keys only in Cloud Run env vars (`--set-env-vars`) or Secrets Manager.
+- CORS is enabled. Optionally restrict origins in `app.py` for production.
 
 ---
 
-## 2) Frontend (Vite React)
+## 2) Frontend (Vite on Vercel)
 
 Project root: `Frontend/`
 
@@ -52,12 +54,12 @@ Ensure the Frontend is a pure static site:
 
 Environment variable usage:
 - The app reads API base from `VITE_API_BASE_URL`.
-- In production, set `VITE_API_BASE_URL` to your backend URL (below).
+- In production on Vercel, set `VITE_API_BASE_URL` to your Cloud Run URL.
 
 Steps:
 1. In Vercel, create a New Project for the frontend. Set "Root Directory" to `Frontend`.
 2. Settings → Environment Variables (Production):
-   - `VITE_API_BASE_URL = https://<your-backend>.vercel.app`
+   - `VITE_API_BASE_URL = <SERVICE_URL_FROM_CLOUD_RUN>`
 3. Build & Development Settings:
    - Framework Preset: Vite
    - Install Command: `npm install`
@@ -99,9 +101,8 @@ npm run dev
 
 ## 4) Common Pitfalls and Fixes
 
-- Error: "Function Runtimes must have a valid version, for example now-php@1.0.0"
-  - Cause: Vercel detected serverless function files in Frontend (e.g., `Frontend/api/**` or `Frontend/vercel.json`).
-  - Fix: Remove `Frontend/api/**` and `Frontend/vercel.json`. Ensure Frontend root in Vercel is `Frontend/` and re-deploy (clear cache).
+- Avoid mixing serverless with this setup
+   - Make sure there is no `api/` under repo root or `Frontend/` configured in Vercel. Our root `vercel.json` only builds Frontend and serves `Frontend/dist`.
 
 - API 400/401 errors after deploy
   - Check `GEMINI_API_KEY` is set in Backend project Env Vars and redeploy.
@@ -111,7 +112,7 @@ npm run dev
   - Backend already enables CORS. Optionally restrict origins to your Frontend domain for production.
 
 - Wrong API base URL in production
-  - Ensure Frontend `VITE_API_BASE_URL` in Vercel points to your Backend URL (e.g., `https://<your-backend>.vercel.app`).
+   - Ensure Frontend `VITE_API_BASE_URL` in Vercel points to your Cloud Run URL (e.g., `https://promptquest-backend-xxxx-uc.a.run.app`).
 
 ---
 

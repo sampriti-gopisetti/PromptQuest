@@ -1,107 +1,81 @@
-# Prompt Quest Monorepo
+# PromptQuest
 
-Shaping the future of AI literacy through play. Prompt Quest turns the hardest new skill—prompt engineering—into a game you can master. Judges love it because:
+PromptQuest is a game for learning high–quality prompt engineering. The app uses a Vite + React (TypeScript) frontend and a Flask backend that scores prompts via Google’s Gemini models.
 
-- Addresses a high‑value, under‑served need. There’s no Duolingo or LeetCode for prompting; this fills a clear market gap with instant value.
-- Directly “demystifies AI.” Players learn by controlling an LLM with clear constraints, turning a black box into a creative tool.
-- Technically novel. Grading prompts is non‑trivial—this ships an elegant AI‑based judging pipeline that evaluates quality with structure and rigor.
-- Venture‑ready. The path from hackathon to product is obvious: content progression, competitive modes, pro tracks, and enterprise training.
+## Tech Stack
+- Frontend: Vite, React, TypeScript, Tailwind, Radix UI
+- Backend: Python, Flask, Flask‑CORS, google‑generativeai
+- Infra (final): Frontend on Vercel (static), Backend on Google Cloud Run (Docker + Gunicorn)
+- Dev tooling: Node.js, npm, Python 3.11, `python-dotenv`
 
-In short: a concrete MVP with immediate wow—exactly what hackathon judges look for.
+## Work Cycle (What We Tried → What Worked)
+1) Single-project serverless on Vercel
+	 - Approach: Put Python under `api/` and route `/api/*` to a serverless function.
+	 - Issues: Local `vercel dev` on Windows needed a system Python; path/link conflicts, runtime config errors, and project root mis-linking caused 502s.
+2) Split hosting: Vercel (frontend) + Render/others (backend)
+	 - Approach: Static frontend on Vercel; long-lived Flask API on another host.
+	 - Result: Works, but added an extra platform and longer cold starts at times.
+3) Final architecture (recommended)
+	 - Frontend: Vercel static site (Vite build → `dist/`).
+	 - Backend: Google Cloud Run with a small Docker image running Gunicorn.
+	 - Why: Simple, reliable, easy environment variables, and zero serverless quirks. Clear `VITE_API_BASE_URL` to a single stable backend URL.
 
-A unified development setup follows below, with a React (Vite) frontend and a Flask (Gemini) backend. Run both with one command and keep your GEMINI_API_KEY out of Git.
-
-## Structure
-
+## Repository Layout
 ```
-/prompt-quest (this folder)
-|-- /Frontend     # React app (Vite + TS)
-|-- app.py        # Flask backend entrypoint
-|-- requirements.txt
-|-- .env.example  # Backend example env (copy to .env and set GEMINI_API_KEY)
-|-- package.json  # Root runner using concurrently
-|-- .gitignore    # Protects .env and other generated files
+/ (repo root)
+	Frontend/            # Vite React app
+	Backend/             # Flask API (Cloud Run)
+	vercel.json          # Root (optional if deploying Frontend/ directly)
+	DEPLOYMENT.md        # Detailed deploy steps (Vercel + Cloud Run)
 ```
 
-Note: If you prefer a clean split into /frontend and /backend subfolders, you can move files later:
-- Move all frontend files into /frontend
-- Move app.py, requirements.txt, levels.py, etc. into /backend
-- Update the package.json scripts accordingly (replace `Frontend` with `frontend` and `python app.py` with `python backend/app.py`).
-
-## Prerequisites
-- Node.js 18+
-- Python 3.10+
-
-## Setup
-1) Install Node deps (root) and frontend deps
-
+## Local Development (Split)
+Backend
 ```cmd
-npm run install-all
-```
-
-2) Configure the backend API key
-- Copy `.env.example` to `.env`
-- Set GEMINI_API_KEY in `.env`
-
-3) (Optional) Create a Python virtual environment and install backend deps
-
-```cmd
+cd Backend
 python -m venv .venv
 .venv\Scripts\activate
 pip install -r requirements.txt
+copy .env.example .env
+# Set GEMINI_API_KEY in .env
+python app.py  # http://localhost:5000
 ```
-
-## Run both servers together
-
+Frontend
 ```cmd
-npm run dev
+cd Frontend
+npm install
+copy .env.example .env   # VITE_API_BASE_URL=http://localhost:5000
+npm run dev              # http://localhost:5173
 ```
 
-This runs:
-- Frontend dev server (Vite) from `Frontend`
-- Flask backend via `python app.py` (default http://localhost:5000)
-
-Tip: Frontend uses `VITE_API_BASE_URL` in `Frontend/.env` to point at the backend. By default it targets http://localhost:5000.
-
-## Deployment readiness
-- Secrets are ignored via .gitignore (.env files). Commit `.env.example` only.
-- For Lovable deployments, provide `GEMINI_API_KEY` as an environment variable and ensure your start commands reflect these scripts or separate CI steps for backend and frontend as needed.
-
-## Production: Enable Gemini API
-
-Set the API key as an environment variable in production. The backend already reads `GEMINI_API_KEY` via `dotenv`/`os.environ`.
-
-- Lovable (recommended): add `GEMINI_API_KEY` in the project’s environment variables UI. No code changes required.
-- Custom hosting (Render/Fly/Heroku/VM): configure an environment variable named `GEMINI_API_KEY` and ensure the process runs `python app.py` from the backend root.
-
-Frontend API base URL
-- If your backend is not on http://localhost:5000, set `VITE_API_BASE_URL` in `Frontend/.env` (or host env) to the public backend URL, e.g. `https://your-backend.example.com`.
-
-Security tips
-- Never commit `.env`. Keep only `.env.example` in Git.
-- Restrict the key in Google AI Studio if possible (quotas, referrers, or environment scoping).
-- Add basic rate‑limiting and request size limits before opening to the public.
-
-## Push to GitHub (Windows, cmd)
-
-If this folder isn’t yet a repo:
-
+## Production Deployment
+Backend (Cloud Run)
 ```cmd
-git init
-git remote add origin https://github.com/sampriti-gopisetti/PromptQuest.git
-git add .
-git commit -m "feat: unified repo with concurrent dev, docs, and secrets hygiene"
-git push -u origin main
+cd Backend
+gcloud auth login
+gcloud config set project <PROJECT_ID>
+gcloud config set run/region <REGION>
+gcloud builds submit --tag gcr.io/<PROJECT_ID>/promptquest-backend
+gcloud run deploy promptquest-backend ^
+	--image gcr.io/<PROJECT_ID>/promptquest-backend ^
+	--platform managed ^
+	--allow-unauthenticated ^
+	--set-env-vars GEMINI_API_KEY=<YOUR_KEY>
 ```
 
-If it’s already a repo and remote is set, just:
+Frontend (Vercel)
+- Project root: `Frontend/`
+- Environment Variables:
+	- `VITE_API_BASE_URL = https://<your-cloud-run-service>.a.run.app`
+- Build: `npm install`, `npm run build`, Output: `dist` (SPA fallback to `index.html` is configured)
 
-```cmd
-git add .
-git commit -m "docs: add judge overview and production Gemini setup"
-git push
-```
+## Environment Variables
+- Backend: `GEMINI_API_KEY` (Cloud Run env var; never commit secrets)
+- Frontend: `VITE_API_BASE_URL` (set on Vercel; compile-time for Vite)
 
-## Troubleshooting
-- If `concurrently` isn’t found, run `npm install` at repo root to install devDependencies.
-- If the backend port is in use, set `PORT=5001` in `.env` and update `Frontend/.env` with `VITE_API_BASE_URL=http://localhost:5001`.
+## Notes & Lessons Learned
+- Serverless Python locally on Windows can be brittle (PATH, runtime detection). A containerized Flask on Cloud Run was smoother and more predictable.
+- Keep frontend and backend clearly split; point the app via `VITE_API_BASE_URL`.
+- Never store API keys in frontend `.env` files in Git; use platform env vars.
+
+For step-by-step commands and troubleshooting, see `DEPLOYMENT.md`.
